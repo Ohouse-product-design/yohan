@@ -130,14 +130,31 @@ for i, h in enumerate(mem_headers, start=1):
 style_header_row(ws_mem, 4, 1, 5)
 ws_mem.row_dimensions[4].height = 26
 
-# Default sample team members - user can edit
-default_members = ["김디자이너", "박디자이너", "이디자이너", "최디자이너", "정디자이너"]
+# Product Design 팀원 명단 (2026년 4월 기준)
+default_members = [
+    ("이요한(Yohan)", "리더"),
+    ("정수현(Gongdee)", ""),
+    ("문지선(Sun)", ""),
+    ("윤소현(Jenna)", ""),
+    ("한수민(Stella)", ""),
+    ("이선진(Deeer)", ""),
+    ("이재구(Jack)", ""),
+    ("조수경(Skamie)", ""),
+    ("방채영(Dana)", ""),
+    ("윤세린(Selah)", ""),
+    ("심희정(Lana)", ""),
+    ("백신혜(Gina)", ""),
+    ("안유진(Jinny)", ""),
+]
 MEM_START = 5
 MEM_ROWS = 30  # capacity for up to 30 members
 
 for i in range(MEM_ROWS):
     row = MEM_START + i
-    name = default_members[i] if i < len(default_members) else ""
+    if i < len(default_members):
+        name, note = default_members[i]
+    else:
+        name, note = "", ""
     ws_mem.cell(row=row, column=1, value=name).fill = INPUT_FILL
     # 1인 할당 (균등) = 총예산 / 활성 멤버 수
     ws_mem.cell(
@@ -152,7 +169,7 @@ for i in range(MEM_ROWS):
         row=row, column=4,
         value=f'=IF(A{row}="","",IF(ISNUMBER(C{row}),C{row},B{row}))'
     ).number_format = KRW
-    ws_mem.cell(row=row, column=5).fill = INPUT_FILL  # 비고
+    ws_mem.cell(row=row, column=5, value=note).fill = INPUT_FILL  # 비고
 
     for c in range(1, 6):
         cell = ws_mem.cell(row=row, column=c)
@@ -196,9 +213,9 @@ LOG_ROWS = 500  # capacity for up to 500 entries
 
 # Sample entries to show format
 samples = [
-    ("2026-02-14", "김디자이너", "도서", "디자인 시스템 책 구매", 45000, ""),
-    ("2026-03-08", "박디자이너", "교육", "Figma 컨퍼런스 티켓", 180000, ""),
-    ("2026-03-22", "이디자이너", "툴/구독", "Figma 연간 구독", 220000, ""),
+    ("2026-02-14", "정수현(Gongdee)", "도서", "디자인 시스템 책 구매", 45000, ""),
+    ("2026-03-08", "문지선(Sun)", "교육", "Figma 컨퍼런스 티켓", 180000, ""),
+    ("2026-03-22", "한수민(Stella)", "툴/구독", "Figma 연간 구독", 220000, ""),
 ]
 
 for i in range(LOG_ROWS):
