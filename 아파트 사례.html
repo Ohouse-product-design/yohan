@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>오늘의집 · 아파트 사례 (집구경)</title>
+  <template id="__bundler_thumbnail" data-bg-color="#1A86FF">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <g transform="translate(100 100)" fill="#fff">
+        <path d="M0 -50 L46 -8 L46 50 L-46 50 L-46 -8 Z" opacity="0.95"/>
+        <rect x="-14" y="14" width="28" height="36" fill="#1A86FF"/>
+        <circle cx="0" cy="-12" r="9" fill="#1A86FF"/>
+        <circle cx="0" cy="-12" r="4" fill="#fff"/>
+      </g>
+    </svg>
+  </template>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- Leaflet for real map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- React + Babel -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <!-- iOS frame component -->
+  <script type="text/babel" src="ios-frame.jsx"></script>
+
+  <!-- Data + icons -->
+  <script src="data.js"></script>
+  <script type="text/babel" src="icons.jsx"></script>
+
+  <!-- Screens -->
+  <script type="text/babel" src="screens/bottom-nav.jsx"></script>
+  <script type="text/babel" src="screens/leaflet-map.jsx"></script>
+  <script type="text/babel" src="screens/feed.jsx"></script>
+  <script type="text/babel" src="screens/map.jsx"></script>
+  <script type="text/babel" src="screens/complex.jsx"></script>
+  <script type="text/babel" src="screens/cdp.jsx"></script>
+  <script type="text/babel" src="screens/compose.jsx"></script>
+  <script type="text/babel" src="screens/room3d.jsx"></script>
+
+  <!-- App root -->
+  <script type="text/babel" src="app.jsx"></script>
+</body>
+</html>
