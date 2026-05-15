@@ -275,13 +275,111 @@ window.APP_DATA = (() => {
   ];
 
   const byApt = (aptId) => cases.filter((c) => c.apt === aptId);
+
+  // Real estate data per apartment (mock)
+  const realEstate = {
+    'apt-jamsil-els': {
+      avgPrice: { sale: '24.8억', jeonse: '13.5억', wolse: '월 320' },
+      pricePerPyeong: 7515,  // 만원
+      priceChange: { value: '+3.2%', positive: true, period: '3개월' },
+      transactions: [
+        { date: '2026.04.28', type: '매매', size: '33평', floor: '15층', price: '24억 8,000' },
+        { date: '2026.04.15', type: '매매', size: '42평', floor: '22층', price: '32억 5,000' },
+        { date: '2026.04.02', type: '전세', size: '33평', floor: '7층', price: '13억 5,000' },
+        { date: '2026.03.22', type: '매매', size: '25평', floor: '11층', price: '17억 9,000' },
+      ],
+      info: { parking: '1.4대/세대', heating: '개별 도시가스', floors: '15~33층', buildingCount: 65 },
+    },
+    'apt-helio': {
+      avgPrice: { sale: '22.3억', jeonse: '11.8억', wolse: '월 290' },
+      pricePerPyeong: 6757,
+      priceChange: { value: '+1.8%', positive: true, period: '3개월' },
+      transactions: [
+        { date: '2026.05.02', type: '매매', size: '33평', floor: '18층', price: '22억 3,000' },
+        { date: '2026.04.21', type: '매매', size: '39평', floor: '24층', price: '27억 0,000' },
+        { date: '2026.04.10', type: '전세', size: '49평', floor: '11층', price: '15억 5,000' },
+        { date: '2026.03.30', type: '매매', size: '25평', floor: '6층', price: '16억 8,500' },
+      ],
+      info: { parking: '1.7대/세대', heating: '개별 도시가스', floors: '15~35층', buildingCount: 84 },
+    },
+    'apt-apgujeong': {
+      avgPrice: { sale: '49.5억', jeonse: '17.5억', wolse: '월 480' },
+      pricePerPyeong: 14143,
+      priceChange: { value: '+5.6%', positive: true, period: '3개월' },
+      transactions: [
+        { date: '2026.04.25', type: '매매', size: '50평', floor: '6층', price: '49억 5,000' },
+        { date: '2026.04.10', type: '매매', size: '73평', floor: '8층', price: '72억 0,000' },
+      ],
+      info: { parking: '0.9대/세대', heating: '중앙난방', floors: '8~12층', buildingCount: 24 },
+    },
+    'apt-leesents': {
+      avgPrice: { sale: '20.5억', jeonse: '11.0억', wolse: '월 270' },
+      pricePerPyeong: 6212,
+      priceChange: { value: '+2.4%', positive: true, period: '3개월' },
+      transactions: [
+        { date: '2026.04.20', type: '매매', size: '36평', floor: '20층', price: '20억 5,000' },
+        { date: '2026.04.05', type: '전세', size: '28평', floor: '12층', price: '11억 0,000' },
+      ],
+      info: { parking: '1.5대/세대', heating: '개별 도시가스', floors: '15~32층', buildingCount: 35 },
+    },
+  };
+  const defaultRE = {
+    avgPrice: { sale: '시세 정보', jeonse: '시세 정보', wolse: '시세 정보' },
+    pricePerPyeong: 6500,
+    priceChange: { value: '+0.0%', positive: true, period: '3개월' },
+    transactions: [],
+    info: { parking: '1.4대/세대', heating: '개별 난방', floors: '10~25층', buildingCount: 30 },
+  };
+  const getRealEstate = (aptId) => realEstate[aptId] || defaultRE;
+
+  // 시공 업체 목록 — 각 단지에서 작업한 업체, 없으면 인근/유사 업체 fallback
+  const contractorsByApt = (aptId) => {
+    const proCases = cases.filter((c) => c.apt === aptId && c.author === 'contractor');
+    const grouped = {};
+    proCases.forEach((c) => {
+      if (!grouped[c.user]) grouped[c.user] = { name: c.user, cases: [], totalLikes: 0, viaThisApt: true };
+      grouped[c.user].cases.push(c);
+      grouped[c.user].totalLikes += c.likes;
+    });
+    let list = Object.values(grouped).sort((a, b) => b.totalLikes - a.totalLikes);
+
+    // Fallback: show top platform contractors (marked as recommended) if none specific
+    if (list.length === 0) {
+      const allPros = cases.filter((c) => c.author === 'contractor');
+      const allGrouped = {};
+      allPros.forEach((c) => {
+        if (!allGrouped[c.user]) allGrouped[c.user] = { name: c.user, cases: [], totalLikes: 0, viaThisApt: false };
+        allGrouped[c.user].cases.push(c);
+        allGrouped[c.user].totalLikes += c.likes;
+      });
+      list = Object.values(allGrouped).sort((a, b) => b.totalLikes - a.totalLikes).slice(0, 5);
+    }
+    return list;
+  };
   const findApt = (id) => apartments.find((a) => a.id === id);
   const findCase = (id) => cases.find((c) => c.id === id);
   const latestCaseFor = (aptId) => {
-    return cases
+    const own = cases
       .filter((c) => c.apt === aptId)
       .sort((a, b) => (a.daysAgo || 99) - (b.daysAgo || 99))[0];
+    if (own) return own;
+    // Generic placeholder content — uses the apt's own name so the popup makes sense
+    const apt = apartments.find((a) => a.id === aptId);
+    const seed = aptId.split('').reduce((s, ch) => s + ch.charCodeAt(0), 0);
+    const fallbackPhoto = cases[seed % cases.length].photo;
+    return {
+      id: 'placeholder-' + aptId,
+      apt: aptId,
+      size: apt?.sizes?.[0] || '33py',
+      title: `${apt?.name || ''} 사례 모음`,
+      user: '오늘의집',
+      author: 'user',
+      likes: 0,
+      photo: fallbackPhoto,
+      hasPlan: false,
+      daysAgo: 7,
+    };
   };
 
-  return { apartments, cases, photos, feedSections, byApt, findApt, findCase, latestCaseFor, photo };
+  return { apartments, cases, photos, feedSections, byApt, findApt, findCase, latestCaseFor, getRealEstate, contractorsByApt, photo };
 })();

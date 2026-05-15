@@ -367,47 +367,48 @@ const SelectedAptBody = ({ aptId, nav }) => {
   const userCount = cases.filter((c) => c.author === 'user').length;
   const proCount = cases.filter((c) => c.author === 'contractor').length;
   const planCount = cases.filter((c) => c.hasPlan).length;
+  // 시공 후기 = users who renovated (have plan) — subset of 집들이
+  const reviewCount = cases.filter((c) => c.author === 'user' && c.hasPlan).length;
   const [filter, setFilter] = React.useState('all');
 
   const visible = cases.filter((c) => {
     if (filter === 'all') return true;
     if (filter === 'plan') return c.hasPlan;
+    if (filter === 'user') return c.author === 'user';
+    if (filter === 'review') return c.author === 'user' && c.hasPlan;
     return c.author === filter;
   });
 
   return (
     <div>
-      {/* Author filter tabs */}
+      {/* Author filter tabs — icons + labels */}
       <div style={{
         display: 'flex', gap: 6, padding: '10px 16px 8px',
         overflowX: 'auto', scrollbarWidth: 'none',
       }}>
         <button onClick={() => setFilter('all')}
           style={authorChipStyle(filter === 'all')}>
-          전체 {cases.length}
+          <span>전체 {cases.length}</span>
         </button>
         <button onClick={() => setFilter('user')}
-          style={authorChipStyle(filter === 'user', '#1A86FF')}>
-          <span style={{
-            width: 6, height: 6, borderRadius: 999,
-            background: filter === 'user' ? '#fff' : '#1A86FF',
-            display: 'inline-block', marginRight: 4,
-          }}/>
-          유저 집들이 {userCount}
+          style={authorChipStyle(filter === 'user')}>
+          <Icon name="house" size={13} stroke={filter === 'user' ? 2.4 : 2}/>
+          <span style={{ marginLeft: 4 }}>집들이 {userCount}</span>
+        </button>
+        <button onClick={() => setFilter('review')}
+          style={authorChipStyle(filter === 'review')}>
+          <Icon name="user" size={13} stroke={filter === 'review' ? 2.4 : 2}/>
+          <span style={{ marginLeft: 4 }}>시공 후기 {reviewCount}</span>
         </button>
         <button onClick={() => setFilter('contractor')}
-          style={authorChipStyle(filter === 'contractor', '#FF7900')}>
-          <span style={{
-            width: 6, height: 6, borderRadius: 999,
-            background: filter === 'contractor' ? '#fff' : '#FF7900',
-            display: 'inline-block', marginRight: 4,
-          }}/>
-          시공업체 {proCount}
+          style={authorChipStyle(filter === 'contractor')}>
+          <Icon name="sparkle" size={13} stroke={filter === 'contractor' ? 2.4 : 2}/>
+          <span style={{ marginLeft: 4 }}>전문가 후기 {proCount}</span>
         </button>
         <button onClick={() => setFilter('plan')}
-          style={authorChipStyle(filter === 'plan', '#1A86FF')}>
-          <Icon name="plan" size={11} stroke={2.4}/>
-          <span style={{ marginLeft: 2 }}>도면 {planCount}</span>
+          style={authorChipStyle(filter === 'plan')}>
+          <Icon name="plan" size={13} stroke={filter === 'plan' ? 2.4 : 2}/>
+          <span style={{ marginLeft: 4 }}>시공도면 {planCount}</span>
         </button>
       </div>
 
@@ -449,6 +450,16 @@ const CaseCardWithAuthor = ({ c, nav }) => {
   const isPro = c.author === 'contractor';
   // Deterministic avatar from user string
   const seed = c.user.split('').reduce((s, ch) => s + ch.charCodeAt(0), 0);
+  const palette = [
+    { bg: '#141414', fg: '#fff' },
+    { bg: '#1A86FF', fg: '#fff' },
+    { bg: '#FF7900', fg: '#fff' },
+    { bg: '#2F8F45', fg: '#fff' },
+    { bg: '#8C72E5', fg: '#fff' },
+    { bg: '#E03671', fg: '#fff' },
+  ];
+  const swatch = palette[seed % palette.length];
+  const initial = c.user.slice(0, 1);
   const avatarUrl = `https://i.pravatar.cc/64?img=${(seed % 70) + 1}`;
 
   return (
@@ -456,64 +467,98 @@ const CaseCardWithAuthor = ({ c, nav }) => {
       <div className="thumb">
         <img src={c.photo} alt="" loading="lazy"/>
 
-        {/* Size — top-right */}
+        {/* Bottom-left: user profile chip on thumbnail */}
         <div style={{
-          position: 'absolute', top: 8, right: 8,
-          background: 'rgba(0,0,0,0.5)', color: '#fff',
-          fontSize: 10, fontWeight: 700,
-          padding: '2px 6px', borderRadius: 3,
-        }}>{c.size.replace('py', '평')}</div>
+          position: 'absolute', left: 8, bottom: 8,
+          display: 'inline-flex', alignItems: 'center', gap: 5,
+          background: 'rgba(20,20,20,0.55)',
+          backdropFilter: 'blur(6px)',
+          padding: '3px 9px 3px 3px',
+          borderRadius: 999,
+          color: '#fff',
+          fontSize: 11, fontWeight: 600,
+          maxWidth: 'calc(100% - 50px)',
+        }}>
+          <div style={{
+            width: 20, height: 20, borderRadius: '50%',
+            flexShrink: 0,
+            background: swatch.bg,
+            color: swatch.fg,
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 10, fontWeight: 800,
+            lineHeight: 1,
+            letterSpacing: '-0.04em',
+            overflow: 'hidden',
+          }}>
+            {isPro
+              ? <span>{initial}</span>
+              : <img src={avatarUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}/>
+            }
+          </div>
+          <span style={{
+            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+            maxWidth: 90, letterSpacing: '-0.02em',
+          }}>
+            {c.user}
+          </span>
+        </div>
 
-        {/* Plan badge — bottom-right */}
+        {/* Bottom-right: bookmark */}
+        <button onClick={(e) => e.stopPropagation()} style={{
+          position: 'absolute', bottom: 4, right: 4,
+          background: 'transparent', border: 0,
+          color: '#fff', padding: 4,
+          filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.4))',
+        }}>
+          <Icon name="bookmark" size={22} stroke={1.6}/>
+        </button>
+
+        {/* Plan badge — top-right */}
         {c.hasPlan && (
           <div style={{
-            position: 'absolute', bottom: 8, right: 8,
+            position: 'absolute', top: 8, right: 8,
             background: '#fff', color: '#1A86FF',
-            fontSize: 10, fontWeight: 800,
-            padding: '3px 7px', borderRadius: 4,
+            fontSize: 10, fontWeight: 800, lineHeight: '14px',
+            padding: '3px 8px', borderRadius: 4,
             display: 'inline-flex', alignItems: 'center', gap: 3,
             boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
           }}>
-            <Icon name="plan" size={9} stroke={2.6}/>
+            <Icon name="plan" size={10} stroke={2.4}/>
             도면
           </div>
         )}
       </div>
-      <div className="title">{c.title}</div>
-      <div className="meta">
-        <Icon name="heart" size={12} stroke={2}/>
-        {c.likes.toLocaleString()}
-        {c.daysAgo && (<>
-          <span style={{ color: 'var(--text-quaternary)', margin: '0 4px' }}>·</span>
-          <span style={{ color: 'var(--text-tertiary)' }}>{c.daysAgo}일 전</span>
-        </>)}
-      </div>
 
-      {/* Profile row — at the bottom of the card */}
+      {/* Title — ODS body2 / 14·600 / clamp 2 */}
       <div style={{
-        display: 'flex', alignItems: 'center', gap: 6,
+        marginTop: 10,
+        fontSize: 14, fontWeight: 600, lineHeight: '20px',
+        letterSpacing: '-0.02em',
+        color: '#141414',
+        display: '-webkit-box',
+        WebkitLineClamp: 2,
+        WebkitBoxOrient: 'vertical',
+        overflow: 'hidden',
+      }}>{c.title}</div>
+
+      {/* Meta — ODS caption / 12·500 */}
+      <div style={{
         marginTop: 6,
+        display: 'flex', alignItems: 'center',
+        fontSize: 12, fontWeight: 500, lineHeight: '16px',
+        color: '#9D9D9D',
+        gap: 4,
       }}>
-        <div style={{
-          width: 22, height: 22, borderRadius: '50%',
-          overflow: 'hidden', flexShrink: 0,
-          background: '#eee',
-        }}>
-          <img src={avatarUrl} alt="" style={{
-            width: '100%', height: '100%', objectFit: 'cover', display: 'block',
-          }}/>
-        </div>
-        <span style={{
-          fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)',
-          overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-          minWidth: 0,
-        }}>{c.user}</span>
+        <Icon name="heart" size={13} stroke={2}/>
+        <span>{c.likes.toLocaleString()}</span>
+        <span style={{ color: '#DCDCDC' }}>·</span>
+        <span>{c.daysAgo ? `${c.daysAgo}일 전` : '방금'}</span>
         {isPro && (
           <span style={{
+            marginLeft: 'auto',
             background: '#FF7900', color: '#fff',
-            fontSize: 9, fontWeight: 800,
-            padding: '2px 5px', borderRadius: 3,
-            letterSpacing: '0.04em', flexShrink: 0,
+            fontSize: 9, fontWeight: 800, lineHeight: '12px',
+            padding: '2px 5px', borderRadius: 3, letterSpacing: '0.04em',
           }}>PRO</span>
         )}
       </div>
