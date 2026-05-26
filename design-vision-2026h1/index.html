@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>2026 Design Vision Workshop · Ohouse Product Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<style>
+:root{
+  --bg:#eef2fc;
+  --bg-soft:#e3eafc;
+  --paper:#ffffff;
+  --ink:#19223f;
+  --ink-soft:#42507a;
+  --muted:#7f8bb0;
+  --line:#dde4f5;
+  --blue:#2f5cf6;
+  --blue-deep:#2746c9;
+  --blue-soft:#dbe4ff;
+  --teal:#1fb5a3;
+  --grad:linear-gradient(95deg,#1fb5a3 0%,#2f7cf6 55%,#5b54ec 100%);
+  --grad-soft:linear-gradient(120deg,#eafaf6 0%,#e6eeff 60%,#eee9ff 100%);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:"Pretendard",-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  word-break:keep-all;
+  overflow-wrap:break-word;
+}
+.deck{height:100vh;overflow-y:scroll;scroll-snap-type:y mandatory;scroll-behavior:smooth;counter-reset:slideno;}
+.slide{counter-increment:slideno;}
+.slide::after{content:counter(slideno);position:absolute;top:3.2vh;right:8.5vw;font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--muted);opacity:.7;z-index:6;font-variant-numeric:tabular-nums;}
+.slide.hero::after,.slide.end::after{color:#fff;opacity:.6;}
+.slide{
+  position:relative;
+  width:100vw;height:100vh;
+  scroll-snap-align:start;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:6.2vh 8.5vw 8vh;
+  overflow:hidden;
+  background:var(--bg);
+}
+.serif{font-family:"Pretendard",-apple-system,sans-serif;}
+/* footer */
+.foot{position:absolute;left:8.5vw;right:8.5vw;bottom:3.4vh;display:flex;justify-content:space-between;align-items:center;font-size:12px;letter-spacing:.04em;color:var(--muted);}
+.foot b{font-weight:600;color:var(--ink-soft);}
+/* eyebrow */
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.22em;color:var(--blue);text-transform:uppercase;margin-bottom:22px;}
+.kicker{font-size:13px;font-weight:600;letter-spacing:.18em;color:var(--teal);text-transform:uppercase;}
+h2.head{font-size:clamp(26px,3.2vw,42px);font-weight:700;line-height:1.22;letter-spacing:-.02em;margin-bottom:8px;}
+.sub{font-size:clamp(14px,1.2vw,17px);color:var(--ink-soft);line-height:1.62;font-weight:400;max-width:64ch;}
+.sub b{color:var(--ink);font-weight:600;}
+.head-wrap{margin-bottom:30px;}
+.head-wrap .kicker{margin-bottom:13px;display:block;}
+
+/* ---------- TITLE ---------- */
+.title-slide{align-items:center;text-align:center;background:radial-gradient(120% 90% at 50% 0%,#e9f6f3 0%,var(--bg) 55%);}
+.title-slide .lab{font-size:14px;font-weight:600;letter-spacing:.32em;color:var(--blue);text-transform:uppercase;margin-bottom:30px;}
+.title-slide .big{font-family:"Pretendard",-apple-system,sans-serif;font-weight:800;font-size:clamp(52px,9.5vw,142px);line-height:1.0;color:var(--blue);letter-spacing:-.035em;}
+.title-slide .big em{font-style:italic;color:var(--ink);}
+.title-slide .ko{margin-top:34px;font-size:clamp(17px,1.6vw,23px);color:var(--ink);font-weight:600;}
+.title-slide .ko span{color:var(--muted);font-weight:400;}
+.title-slide .meta{margin-top:48px;font-size:14px;color:var(--muted);letter-spacing:.04em;}
+.rule{width:54px;height:3px;background:var(--grad);border-radius:3px;margin:30px auto 0;}
+
+/* ---------- DIVIDER ---------- */
+.divider{background:var(--bg-soft);align-items:center;text-align:center;}
+.divider .num{font-size:15px;letter-spacing:.3em;color:var(--blue);margin-bottom:18px;font-weight:500;}
+.divider .word{font-family:"Pretendard",-apple-system,sans-serif;font-weight:800;font-size:clamp(46px,8vw,116px);line-height:1.1;color:var(--blue);letter-spacing:-.035em;}
+.divider .word em{font-style:italic;}
+.divider .dsub{margin-top:30px;font-size:clamp(15px,1.4vw,20px);color:var(--ink-soft);line-height:1.6;max-width:52ch;}
+
+/* ---------- STATEMENT ---------- */
+.statement{justify-content:center;}
+.statement .lead{font-size:clamp(16px,1.4vw,20px);color:var(--ink-soft);font-weight:500;margin-bottom:22px;}
+.statement .punch{font-family:"Pretendard",-apple-system,sans-serif;font-weight:700;font-size:clamp(28px,4vw,56px);line-height:1.28;letter-spacing:-.025em;color:var(--ink);max-width:24ch;}
+.statement .punch b{color:var(--blue);font-weight:600;}
+.statement .note{margin-top:28px;font-size:clamp(14px,1.15vw,17px);color:var(--muted);line-height:1.62;max-width:60ch;}
+.statement .note b{color:var(--ink-soft);}
+.tagline{display:inline-flex;align-items:center;gap:8px;margin-top:32px;padding:8px 16px;border-radius:999px;background:var(--blue-soft);color:var(--blue-deep);font-size:13px;font-weight:600;letter-spacing:.02em;width:fit-content;}
+/* statement with side image */
+.statement.with-img{display:grid;grid-template-columns:1.12fr .88fr;align-items:center;gap:5.5vw;}
+.statement.with-img .st-text{display:flex;flex-direction:column;justify-content:center;min-width:0;}
+.statement.with-img .st-media{display:flex;align-items:center;justify-content:center;min-width:0;}
+.statement.with-img .st-media img{max-width:100%;max-height:64vh;object-fit:contain;border-radius:16px;}
+.statement.with-img .st-media.framed img{background:#fff;padding:18px;border:1px solid var(--line,#e6e8ec);box-shadow:0 18px 48px -24px rgba(20,40,80,.28);}
+.statement.with-img .punch{max-width:18ch;}
+.statement.with-img .note{max-width:46ch;}
+
+/* ---------- PILLS / TAGS ---------- */
+.pill{display:inline-flex;align-items:center;gap:7px;border-radius:999px;font-weight:600;font-size:13px;padding:7px 14px;white-space:nowrap;}
+.p0{background:var(--grad);color:#fff;box-shadow:0 6px 16px -8px rgba(47,124,246,.7);}
+.p1{background:var(--blue-soft);color:var(--blue-deep);}
+.p2{background:#eef1f8;color:var(--muted);border:1px solid var(--line);}
+.qw{font-size:10px;font-weight:700;letter-spacing:.06em;padding:2px 7px;border-radius:6px;background:rgba(20,40,90,.16);color:inherit;}
+.p0 .qw{background:rgba(255,255,255,.3);color:#fff;}
+
+/* ---------- WORKFLOW MAP ---------- */
+.phases{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:start;}
+.phase{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px 16px 20px;box-shadow:0 12px 30px -22px rgba(25,34,63,.4);}
+.phase h4{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.phase .pn{font-size:11px;color:var(--muted);letter-spacing:.04em;margin-bottom:14px;}
+.phase .stack{display:flex;flex-direction:column;gap:8px;align-items:flex-start;}
+.platform{margin-top:16px;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:16px 18px;display:flex;align-items:center;gap:18px;box-shadow:0 12px 30px -22px rgba(25,34,63,.4);}
+.platform .lbl{font-size:13px;font-weight:700;color:var(--teal);min-width:120px;}
+.platform .row{display:flex;gap:8px;flex-wrap:wrap;}
+.legend{display:flex;gap:18px;margin-top:16px;font-size:12px;color:var(--muted);align-items:center;}
+.legend i{width:11px;height:11px;border-radius:3px;display:inline-block;margin-right:6px;vertical-align:-1px;}
+
+/* ---------- CARD GRID ---------- */
+.grid{display:grid;gap:13px;}
+.g3{grid-template-columns:repeat(3,1fr);}
+.g2{grid-template-columns:repeat(2,1fr);}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:17px 18px 16px;box-shadow:0 10px 26px -22px rgba(25,34,63,.45);display:flex;flex-direction:column;gap:8px;}
+.card .cname{font-size:14.5px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:8px;line-height:1.3;flex-wrap:wrap;}
+.card .cdesc{font-size:12px;color:var(--ink-soft);line-height:1.5;flex:1;}
+.who{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--blue-deep);}
+.who .dot{width:18px;height:18px;border-radius:50%;background:var(--grad);color:#fff;font-size:9px;display:flex;align-items:center;justify-content:center;font-weight:700;}
+.tag-mini{font-size:10px;font-weight:700;letter-spacing:.05em;color:var(--teal);background:#e6f7f3;padding:3px 8px;border-radius:6px;}
+
+/* ---------- TABLE ---------- */
+.tbl{width:100%;border-collapse:collapse;background:var(--paper);border-radius:14px;overflow:hidden;box-shadow:0 12px 30px -24px rgba(25,34,63,.5);font-size:13px;}
+.tbl th{background:#f4f6fd;text-align:left;padding:10px 16px;font-size:11.5px;font-weight:700;letter-spacing:.04em;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--line);}
+.tbl td{padding:9px 16px;border-bottom:1px solid var(--line);color:var(--ink-soft);line-height:1.45;vertical-align:top;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl td b{color:var(--ink);}
+.nm{display:inline-flex;align-items:center;gap:8px;font-weight:700;color:var(--ink);}
+.nm .dot{width:22px;height:22px;border-radius:50%;background:var(--grad);color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:700;flex:none;}
+.stat{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;}
+.s-done{background:#e6f7f3;color:#0f9f8c;}
+.s-prog{background:var(--blue-soft);color:var(--blue-deep);}
+.s-todo{background:#eef1f8;color:var(--muted);}
+
+/* ---------- FLOW (pipeline) ---------- */
+.flow{display:flex;align-items:stretch;gap:0;}
+.fnode{flex:1;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px 16px;box-shadow:0 12px 30px -24px rgba(25,34,63,.45);display:flex;flex-direction:column;gap:8px;}
+.fnode .who{margin-bottom:2px;}
+.fnode .ft{font-size:14px;font-weight:700;color:var(--ink);line-height:1.3;}
+.fnode .fd{font-size:12px;color:var(--ink-soft);line-height:1.5;}
+.fnode .out{margin-top:auto;font-size:11px;font-weight:700;color:var(--teal);background:#e6f7f3;padding:5px 9px;border-radius:7px;align-self:flex-start;}
+.farrow{display:flex;align-items:center;justify-content:center;width:34px;color:var(--blue);font-size:22px;flex:none;}
+.brain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;align-items:start;}
+.bcard{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:0 12px 30px -24px rgba(25,34,63,.45);}
+.bcard h4{display:flex;align-items:center;gap:9px;font-size:16px;font-weight:700;margin-bottom:12px;}
+.bcard ul{list-style:none;display:flex;flex-direction:column;gap:9px;}
+.bcard li{font-size:13px;color:var(--ink-soft);line-height:1.5;padding-left:18px;position:relative;}
+.bcard li::before{content:"";position:absolute;left:0;top:7px;width:7px;height:7px;border-radius:2px;background:var(--grad);}
+.bcard .link{margin-top:14px;font-size:11.5px;color:var(--blue-deep);background:var(--blue-soft);padding:8px 12px;border-radius:9px;line-height:1.45;}
+
+/* ---------- SPLIT BAR ---------- */
+.split{display:flex;border-radius:14px;overflow:hidden;box-shadow:0 14px 34px -26px rgba(25,34,63,.55);}
+.split .seg{padding:18px 24px;display:flex;flex-direction:column;gap:4px;justify-content:center;}
+.split .seg .sv{font-family:"Pretendard",-apple-system,sans-serif;font-size:28px;font-weight:600;line-height:1;}
+.split .seg .sl{font-size:13px;font-weight:600;line-height:1.4;}
+.seg.own{flex:62;background:var(--grad);color:#fff;}
+.seg.help{flex:38;background:#e3eafc;color:var(--blue-deep);}
+
+/* ---------- ROOTS → BUILDER ---------- */
+.roots{display:flex;align-items:stretch;gap:14px;}
+.root{flex:1;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:20px 17px;box-shadow:0 12px 30px -24px rgba(25,34,63,.45);}
+.root .rr{display:inline-block;font-size:12px;font-weight:700;color:var(--teal);letter-spacing:.05em;background:#e6f7f3;padding:4px 11px;border-radius:7px;margin-bottom:12px;}
+.root .rb{font-family:"Pretendard",-apple-system,sans-serif;font-size:18px;font-weight:600;color:var(--ink);line-height:1.3;}
+.root .rd{font-size:12px;color:var(--ink-soft);margin-top:8px;line-height:1.5;}
+.root.lead{flex:1.5;background:var(--grad);border-color:transparent;box-shadow:0 18px 40px -22px rgba(47,124,246,.75);}
+.root.lead .rr{background:rgba(255,255,255,.25);color:#fff;}
+.root.lead .rb{color:#fff;}
+.root.lead .rd{color:rgba(255,255,255,.92);font-size:12.5px;}
+.root.lead .rd b{color:#fff;}
+.review-band{margin-top:16px;text-align:center;font-size:13px;font-weight:600;color:var(--blue-deep);background:var(--blue-soft);padding:11px;border-radius:11px;}
+.review-band b{color:var(--blue-deep);}
+
+/* ---------- CYCLE ---------- */
+.cyc{display:flex;align-items:stretch;gap:0;}
+.cnode{flex:1;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px 16px;box-shadow:0 12px 30px -24px rgba(25,34,63,.45);display:flex;flex-direction:column;gap:9px;}
+.cnode .cnum{width:26px;height:26px;border-radius:50%;background:var(--grad);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.cnode .ct{font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.4;}
+.cnode .cdesc{font-size:12px;color:var(--ink-soft);line-height:1.5;}
+.carrow{display:flex;align-items:center;justify-content:center;width:30px;color:var(--blue);font-size:20px;flex:none;}
+
+/* ---------- TWO-COL compare ---------- */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch;}
+.col{border-radius:16px;padding:26px 24px;background:#fff;box-shadow:0 12px 32px -20px rgba(25,34,63,.45);}
+.col.inward{border:1px solid #9fdccf;border-top:4px solid var(--teal);}
+.col.outward{border:1px solid #b3bdf2;border-top:4px solid var(--blue);}
+.col .clab{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px;}
+.col.inward .clab{color:var(--teal);}
+.col.outward .clab{color:var(--blue-deep);}
+.col .cdir{font-family:"Pretendard",-apple-system,sans-serif;font-size:clamp(20px,2.2vw,28px);font-weight:600;line-height:1.28;color:var(--ink);margin-bottom:12px;}
+.col .ctext{font-size:13.5px;color:var(--ink-soft);line-height:1.6;}
+.col .ctext b{color:var(--ink);}
+.col .cway{display:inline-block;margin-top:14px;font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;}
+
+/* ---------- CONCERN / meme ---------- */
+.concern{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;}
+.bubbles{display:flex;flex-direction:column;gap:16px;}
+.bubble{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:16px 19px;font-size:14.5px;line-height:1.55;color:var(--ink);box-shadow:0 14px 34px -26px rgba(25,34,63,.5);position:relative;max-width:92%;}
+.bubble.right{align-self:flex-end;background:#eef3ff;border-color:#dbe4ff;}
+.bubble .b-who{font-size:11px;font-weight:700;color:var(--blue);letter-spacing:.04em;margin-bottom:6px;text-transform:uppercase;}
+.memeimg{margin-top:18px;border-radius:14px;overflow:hidden;border:1px solid var(--line);box-shadow:0 14px 34px -26px rgba(25,34,63,.5);background:#0c1024;}
+.memeimg img{width:100%;display:block;opacity:.92;}
+.memeimg .cap{font-size:10.5px;color:var(--muted);padding:7px 12px;background:var(--paper);}
+.concern .punch{font-family:"Pretendard",-apple-system,sans-serif;font-weight:700;font-size:clamp(25px,3.2vw,42px);line-height:1.32;letter-spacing:-.025em;color:var(--ink);}
+.concern .punch b{color:var(--blue);}
+.concern .cnote{margin-top:20px;font-size:14.5px;color:var(--ink-soft);line-height:1.6;}
+
+/* ---------- BIG NUMBER ---------- */
+.bignum{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+.bignum .n{font-family:"Pretendard",-apple-system,sans-serif;font-weight:800;font-size:clamp(104px,18vw,240px);line-height:.9;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-.03em;}
+.bignum .ncap{font-size:clamp(17px,1.7vw,24px);font-weight:600;color:var(--ink);margin-top:10px;}
+.bignum .nsub{font-size:clamp(14px,1.15vw,16px);color:var(--muted);margin-top:14px;max-width:56ch;line-height:1.6;}
+.compare-line{display:flex;gap:22px;align-items:center;margin-top:28px;font-size:15px;color:var(--ink-soft);}
+.compare-line .vs{color:var(--muted);font-weight:600;}
+.compare-line b{color:var(--ink);}
+
+/* ---------- HERO GRADIENT ---------- */
+.hero{background:linear-gradient(115deg,#13b39e 0%,#2f7cf6 42%,#5b54ec 70%,#b95cf0 100%);color:#fff;align-items:center;text-align:center;}
+.hero .hk{font-size:13px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:rgba(255,255,255,.78);margin-bottom:28px;}
+.hero .hq{font-family:"Pretendard",-apple-system,sans-serif;font-size:clamp(28px,3.8vw,52px);line-height:1.3;font-weight:700;max-width:26ch;letter-spacing:-.025em;}
+.hero .hq em{font-style:italic;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:6px;text-decoration-color:rgba(255,255,255,.6);}
+.hero .hsub{margin-top:32px;font-size:clamp(15px,1.3vw,19px);color:rgba(255,255,255,.86);line-height:1.65;max-width:52ch;}
+.hero .foot{color:rgba(255,255,255,.6);}
+.hero .foot b{color:rgba(255,255,255,.92);}
+
+/* ---------- END ---------- */
+.end{align-items:center;text-align:center;background:var(--bg-soft);}
+.end .big{font-family:"Pretendard",-apple-system,sans-serif;font-weight:800;font-size:clamp(38px,6vw,84px);line-height:1.12;color:var(--blue);letter-spacing:-.03em;}
+.end .big em{color:var(--ink);font-style:italic;}
+.end .esub{margin-top:26px;font-size:clamp(15px,1.4vw,20px);color:var(--ink-soft);line-height:1.6;}
+
+/* ---------- blog featured ---------- */
+.blogwrap{display:grid;grid-template-columns:1.35fr 1fr;gap:20px;align-items:start;}
+.blogshot{border-radius:14px;overflow:hidden;border:1px solid var(--line);box-shadow:0 22px 50px -30px rgba(25,34,63,.6);background:var(--paper);}
+.blogshot img{width:100%;display:block;max-height:60vh;object-fit:cover;object-position:top;}
+.feat{background:var(--grad);border-radius:16px;padding:24px;color:#fff;box-shadow:0 18px 40px -26px rgba(47,124,246,.8);height:100%;display:flex;flex-direction:column;}
+.feat .fk{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.82);margin-bottom:12px;}
+.feat .ftitle{font-size:18px;font-weight:700;line-height:1.35;margin-bottom:14px;}
+.feat .fq{font-size:12.5px;line-height:1.65;color:rgba(255,255,255,.92);border-left:2px solid rgba(255,255,255,.5);padding-left:13px;margin-top:auto;}
+
+/* ---------- SLACK CARD (authentic) ---------- */
+.slk{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:15px 17px;box-shadow:0 12px 30px -24px rgba(25,34,63,.5);}
+.slk .sh{display:flex;align-items:center;gap:9px;margin-bottom:9px;}
+.slk .av{width:30px;height:30px;border-radius:8px;color:#fff;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;flex:none;}
+.slk .nm2{font-weight:700;font-size:13px;color:var(--ink);}
+.slk .tm{font-size:11px;color:var(--muted);margin-left:2px;}
+.slk .ch{font-size:11px;color:var(--blue-deep);background:var(--blue-soft);padding:2px 9px;border-radius:7px;font-weight:600;margin-left:auto;}
+.slk .tx{font-size:12.5px;color:var(--ink-soft);line-height:1.58;}
+.slk .tx b{color:var(--ink);font-weight:700;}
+.slk .tx .em{color:var(--blue-deep);font-weight:600;}
+.slk .react{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;}
+.slk .rc{font-size:11px;background:#eef3ff;border:1px solid var(--blue-soft);border-radius:11px;padding:1px 8px;color:var(--blue-deep);font-weight:600;}
+.slackcol{display:flex;flex-direction:column;gap:12px;}
+.slack-head{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:4px;}
+.slack-head .hashch{color:var(--blue-deep);background:var(--blue-soft);padding:2px 9px;border-radius:7px;}
+
+/* ---------- CREED (attitude) ---------- */
+.creed{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:24px;}
+.ci{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:0 12px 30px -26px rgba(25,34,63,.5);position:relative;overflow:hidden;}
+.ci::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--grad);}
+.ci .cq{font-family:"Pretendard",-apple-system,sans-serif;font-size:clamp(17px,1.65vw,22px);font-weight:600;color:var(--ink);line-height:1.32;}
+.ci .cq b{color:var(--blue);}
+.ci .cc{font-size:12.5px;color:var(--muted);margin-top:7px;line-height:1.5;}
+
+/* ---------- TWO-TIER (reputation → strategy) ---------- */
+.tier{display:flex;flex-direction:column;gap:13px;}
+.tierbox{border-radius:15px;padding:18px 22px;box-shadow:0 8px 22px -14px rgba(25,34,63,.28);}
+.tierbox.now{background:linear-gradient(120deg,#d4f3ec,#d6ecff);border:1px solid #92d6c7;}
+.tierbox.next{background:linear-gradient(120deg,#d8e4ff,#e1d6ff);border:1px solid #b3bdf2;}
+.tierbox .tl{font-size:12px;font-weight:700;letter-spacing:.05em;margin-bottom:13px;text-transform:uppercase;}
+.tierbox.now .tl{color:var(--teal);}
+.tierbox.next .tl{color:var(--blue-deep);}
+.tierrow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.tierrow.three{grid-template-columns:repeat(3,1fr);}
+.tchip{background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:11px 13px;font-size:13px;font-weight:700;color:var(--ink);line-height:1.3;}
+.tchip span{display:block;font-size:11.5px;color:var(--muted);font-weight:400;margin-top:4px;font-style:italic;}
+/* talent profile */
+.talent{display:grid;grid-template-columns:.86fr 1.14fr;gap:3vw;align-items:center;}
+.talent .t-media{display:flex;flex-direction:column;gap:14px;}
+.talent .t-media img{width:100%;background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 18px;box-shadow:0 12px 30px -22px rgba(25,34,63,.4);}
+.talent .t-cap{font-size:12.5px;color:var(--muted);line-height:1.5;}
+.talent .t-cap b{color:var(--ink-soft);}
+.talent .t-cards{display:flex;flex-direction:column;gap:11px;}
+.talent .t-card{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:15px 18px;box-shadow:0 10px 26px -20px rgba(25,34,63,.35);}
+.talent .t-card.lead-card{border-color:#bcd0ff;background:linear-gradient(120deg,#eef3ff,#fff);}
+.talent .t-h{font-size:16px;font-weight:700;color:var(--ink);display:flex;align-items:baseline;gap:9px;}
+.talent .t-h em{font-size:12px;font-weight:700;font-style:normal;color:var(--blue);letter-spacing:.04em;}
+.talent .t-h .en{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:.01em;}
+.talent .t-d{margin-top:6px;font-size:13px;line-height:1.55;color:var(--ink-soft);}
+.talent .t-d b{color:var(--blue-deep);font-weight:600;}
+/* builder image */
+.builder-img{display:flex;justify-content:center;align-items:center;margin-top:6px;}
+.builder-img img{max-height:46vh;max-width:72%;object-fit:contain;border-radius:16px;border:1px solid var(--line);box-shadow:0 18px 48px -26px rgba(20,40,80,.3);}
+
+/* progress + hint */
+.prog{position:fixed;top:0;left:0;height:3px;background:var(--grad);width:0;z-index:50;transition:width .25s ease;}
+.hint{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--muted);letter-spacing:.05em;z-index:40;opacity:.7;}
+@media print{.deck{height:auto;overflow:visible;}.slide{page-break-after:always;height:100vh;}.prog,.hint{display:none;}}
+.dimmed{color:var(--muted);}
+</style>
+</head>
+<body>
+<div class="prog" id="prog"></div>
+<div class="deck" id="deck">
+
+<!-- 01 TITLE -->
+<section class="slide title-slide">
+  <div class="lab">Ohouse Product Design · 2026</div>
+  <div class="big serif">Design <em>Vision</em><br/>Workshop</div>
+  <div class="ko">우리는 어디까지 왔고, <span>다음은 어디로 가는가</span></div>
+  <div class="rule"></div>
+  <div class="meta">Yohan · Product Design Lead &nbsp;|&nbsp; 오늘의집 프로덕트 디자인팀</div>
+</section>
+
+<!-- 02 DIVIDER 01 -->
+<section class="slide divider">
+  <div class="num serif">— 01 · REVIEW —</div>
+  <div class="word serif">무엇을 해왔나</div>
+  <div class="dsub">2026년 상반기, 우리가 무엇을 했고 / 어떤 환경에 도달했는지 돌아봅니다.</div>
+</section>
+
+<!-- 03 GOAL -->
+<section class="slide statement with-img">
+  <div class="st-text">
+    <div class="lead">올 상반기, 우리의 목표는 단 하나였습니다.</div>
+    <div class="punch serif">AI를 정말 <b>잘 쓰는 팀</b>이<br/>되는&nbsp;것.</div>
+    <div class="note">개인의 시도를 흩어지게 두지 않고, PD의 일하는 방식 전체를 한 장의 지도로 만들고 — 스킬·플러그인·교육·기록으로 그 위를 채워왔습니다.</div>
+  </div>
+  <div class="st-media framed"><img src="img/concept-b.png" alt="문제를 AI로 해결하는 개념 다이어그램"/></div>
+  <div class="foot"><b>Ohouse Product Design</b><span>01 · Review</span></div>
+</section>
+
+<!-- 05 SKILLS & PLUGINS -->
+<section class="slide">
+  <div class="head-wrap">
+    <span class="kicker">Skills & Plugins</span>
+    <h2 class="head">상반기, 우리가 만든 도구들</h2>
+    <p class="sub">PD 업무 곳곳의 반복을, 팀원들이 직접 스킬과 플러그인으로 만들고 <b>#des-product-designer</b> 채널에 공유했습니다.</p>
+  </div>
+  <div class="grid g3">
+    <div class="card"><div class="cname">CoMaker <span class="tag-mini">Figma Plugin</span></div><div class="cdesc">컴포넌트를 일관 규칙으로 분해하고 ODS 토큰·구조·제약을 담은 Design.md 자동 생성. "디자이너 원본 → AI가 쓸 수 있는 에셋"으로.</div><div class="who"><span class="dot">J</span> Jack</div></div>
+    <div class="card"><div class="cname">/ods 플러그인 <span class="tag-mini">ODS MCP</span></div><div class="cdesc">ods-hermes + prototype MCP. ODS 컴포넌트 사용 기준·근거 조회, 선택 기준 비교, ODS 기반 프로토타입 scaffold 생성·리뷰.</div><div class="who"><span class="dot">T</span> Tyler</div></div>
+    <div class="card"><div class="cname">Figma → HTML + Pixel Diff <span class="tag-mini">Skill</span></div><div class="cdesc">Figma 링크만 넣으면 ODS 토큰화 + 컴포넌트 JS화 + 픽셀 diff로 오차 3% 미만까지 반복 보정.</div><div class="who"><span class="dot">S</span> Stella</div></div>
+    <div class="card"><div class="cname">/prd-to-prototype <span class="tag-mini">Skill</span></div><div class="cdesc">PRD URL만 넣으면 어드민과 동일 디자인의 프로토타입 자동 생성. 신규 9개 페이지 20일 → 5일로.</div><div class="who"><span class="dot">L</span> Lana</div></div>
+    <div class="card"><div class="cname">jira-qa-bug <span class="tag-mini">Skill</span></div><div class="cdesc">QA에서 발견한 디자인·스펙 버그 티켓을 Jira에 자동 등록. 매핑·라벨·담당자 lookup·본문 자동화.</div><div class="who"><span class="dot">D</span> Deeer</div></div>
+    <div class="card"><div class="cname">Reference Finder <span class="tag-mini">Figma Plugin</span></div><div class="cdesc">외부 레퍼런스 앱 스크린샷을 서비스·패턴·컴포넌트별로 검색해 Figma로 바로 가져옴.</div><div class="who"><span class="dot">L</span> Lana</div></div>
+    <div class="card"><div class="cname">DA 스킬 23종 <span class="tag-mini">/query 외</span></div><div class="cdesc">데이터 분석·쿼리·유저 리서치·리포팅 슬래시 커맨드 모음. PD팀에 공유·도입.</div><div class="who"><span class="dot">F</span> Fred · Yohan 공유</div></div>
+    <div class="card"><div class="cname">String Master <span class="tag-mini">Figma Plugin</span></div><div class="cdesc">String ID·Key 자동 생성, 폰트/국가 prefix 처리, 번역 요청 탭. 로컬라이즈 대폭 단축.</div><div class="who"><span class="dot">L</span> Lucy</div></div>
+  </div>
+  <div class="foot"><b>Ohouse Product Design</b><span>01 · Review</span></div>
+</section>
+
+<!-- 05b SLACK PROOF -->
+<section class="slide">
+  <div class="head-wrap">
+    <span class="kicker">Shared in Slack</span>
+    <h2 class="head">혼자 만든 도구를, 팀의 표준으로</h2>
+    <p class="sub">각자 만든 스킬을 <b>#des-product-designer</b>에 올려 서로 가져다 쓰고 — 커스텀하고 — 다시 공유했어요. 도구가 팀의 자산이 되는 흐름.</p>
+  </div>
+  <div class="grid g3">
+    <div class="slk">
+      <div class="sh"><span class="av" style="background:linear-gradient(135deg,#1fb5a3,#2f7cf6)">디</span><span class="nm2">이선진 / 디어</span><span class="tm">5월 12일</span><span class="ch"># des-product-designer</span></div>
+      <div class="tx">🆕 <b>QA 버그 티켓 자동 발행 스킬 공유 (jira-qa-bug)</b><br/>오랜만에 디자인 QA 하다가 티켓 만드는 게 넘 귀찮아서 스킬로 만들었읍니다. QA 단계에서 발견한 디자인·스펙 버그를 <span class="em">Jira에 자동 등록</span>해주는 스킬이에요. 각자 커스텀해서 쓰셔도 됩니다~</div>
+      <div class="react"><span class="rc">🙌 7</span><span class="rc">👏 5</span><span class="rc">🥹 3</span></div>
+    </div>
+    <div class="slk">
+      <div class="sh"><span class="av" style="background:linear-gradient(135deg,#2f7cf6,#5b54ec)">레</span><span class="nm2">심희정 / 레이나</span><span class="tm">4월 24일</span><span class="ch"># des-product-designer</span></div>
+      <div class="tx"><b>[PRD 기반 어드민 프로토타입 생성 자동화 스킬 공유]</b><br/>👉 이제 PRD url만 넣고 "〈OO메뉴〉 페이지 생성해줘" 하면 <span class="em">어드민과 동일한 디자인</span>의 프로토타입을 생성해줍니다. FigmaMake → Claude Code로 옮겨 효율화했어요.</div>
+      <div class="react"><span class="rc">🔥 9</span><span class="rc">👀 6</span><span class="rc">🙏 4</span></div>
+    </div>
+    <div class="slk">
+      <div class="sh"><span class="av" style="background:linear-gradient(135deg,#5b54ec,#b95cf0)">프</span><span class="nm2">설유환 / 프레드</span><span class="tm">4월 3일</span><span class="ch"># des-product-designer</span></div>
+      <div class="tx">📋 <b>user-insight 저장소 스킬 목록 (총 23개)</b><br/>🔍 데이터 분석·쿼리 / 🎙️ 유저 리서치·인터뷰 / 📊 통계 분석 / 📈 리포팅·재무 / 🔧 유틸리티… <span class="em">조금씩 변형해서 쓰시면 됩니다.</span> PD팀에 공유·도입했어요.</div>
+      <div class="react"><span class="rc">🤩 11</span><span class="rc">💜 8</span></div>
+    </div>
+  </div>
+  <p class="sub" style="margin-top:18px;max-width:none">→ "내가 만든 걸 너도 쓴다"가 기본값이 되면서 — 개인의 스킬이 <b>팀의 표준</b>으로 빠르게 번졌습니다.</p>
+  <div class="foot"><b>Ohouse Product Design</b><span>01 · Review</span></div>
+</section>
+
+<!-- 06 EDUCATION -->
+<section class="slide">
+  <div class="head-wrap">
+    <span class="kicker">Education & Sessions</span>
+    <h2 class="head">그리고, 함께 배웠습니다</h2>
+    <p class="sub">개인의 실력에 머물지 않도록, 상반기 내내 정기 세션과 온보딩으로 <b>팀 전체의 평균</b>을 끌어올렸습니다.</p>
+  </div>
+  <div class="grid g3">
+    <div class="card"><div class="cname">Weekly AI Design Study</div><div class="cdesc">매주 목요일 정기 세션. Claude Code for VS Code, 로그뷰어 MCP 설치 등 실습.</div><div class="who"><span class="dot">O</span> 팀 운영 · 매주</div></div>
+    <div class="card"><div class="cname">공용 GitHub로 스킬 공유하는 법</div><div class="cdesc">공용 repo(bucketplace/product-design) 공유 방법·권한 신청 절차 안내.</div><div class="who"><span class="dot">F</span> Fred</div></div>
+    <div class="card"><div class="cname">Cursor + Athena MCP 연결</div><div class="cdesc">PD가 직접 데이터를 다룰 수 있도록 Cursor·Claude에 Athena MCP 연결 실습.</div><div class="who"><span class="dot">Y</span> Yohan</div></div>
+    <div class="card"><div class="cname">프로젝트 정리 가이드 세션</div><div class="cdesc">AI가 잘 읽을 수 있게 프로젝트·파일 정리하는 가이드.</div><div class="who"><span class="dot">J</span> Jack</div></div>
+    <div class="card"><div class="cname">디자인 시스템 온보딩</div><div class="cdesc">ODS 소개·연결, Track Component, 문의 채널까지 신규 합류자 온보딩.</div><div class="who"><span class="dot">T</span> DS팀 · Tyler</div></div>
+    <div class="card"><div class="cname">Claude Code Day 1</div><div class="cdesc">처음 참여자 기본 코스 + 캘린더·슬랙·노션 MCP 연동 사전 셋업.</div><div class="who"><span class="dot">+</span> 사전 셋업 가이드</div></div>
+  </div>
+  <div class="foot"><b>Ohouse Product Design</b><span>01 · Review</span></div>
+</section>
+
+<!-- 07 BLOG -->
+<section class="slide">
+  <div class="head-wrap">
+    <span class="kicker">Design Blog</span>
+    <h2 class="head">우리의 기록을, 글로 남겼습니다</h2>
+    <p class="sub">"디자이너가 AI를 이렇게 썼다"는 실전기를 팀이 함께 써 <b>오늘의집 디자인 블로그</b>에 실었습니다. 그리고 그 위에, 리더의 다음 질문 <b>"AI는 디자인의 정점이 아니라 평균을 높이는 도구다"</b>를 더했습니다.</p>
+  </div>
+  <div class="blogshot">
+    <img src="img/blog-story.png" alt="오늘의집 디자인 블로그 — 팀이 함께 쓴 AI 실전기" loading="lazy"/>
+  </div>
+  <div class="foot"><b>Ohouse Product Design</b><span>01 · Review</span></div>
+</section>
+
+<!-- 08 RESULT -->
+<section class="slide statement with-img">
+  <div class="st-text">
+    <div class="lead">스킬, 교육, 기록 — 그 모든 노력의 결과로</div>
+    <div class="punch serif">우리는, 처음 목표했던<br/><b>AI를 잘 쓰는 환경</b>에<br/>도달했습니다.</div>
+    <div class="note">이게 상반기 목표였고, 리더로서 저는 우리가 이걸 달성했다고 생각합니다. — 여기까지가, 개인의 속도를 끌어올린 <b>1막</b>입니다.</div>
+    <span class="tagline">✓ Act 1 — 개인의 속도, 완료</span>
+  </div>
+  <div class="st-media"><img src="img/reached-goal.png" alt="목표 지점에 도달한 사람 — AI를 잘 쓰는 환경"/></div>
+  <div class="foot"><b>Ohouse Product Design</b><span>01 · Review</span></div>
+</section>
+
+<!-- 09 LESSON -->
+<section class="slide statement with-img">
+  <div class="st-text">
+    <span class="kicker" style="margin-bottom:18px;display:block">Lesson learned</span>
+    <div class="lead">그리고 무엇보다, 상반기에 한 가지를 분명히 배웠습니다.</div>
+    <div class="punch serif">우리가 <b>한곳에 모여 집중할 때</b><br/>팀의 위상이 올라갑니다.</div>
+    <div class="note">흩어진 개인의 시도일 땐 잘 드러나지 않던&nbsp;것이, 같은 목표에 함께 집중하자 달라졌어요. 조직 안에서 디자인팀의 <b>인지도</b>가 눈에 띄게 올라갔고, 자연스럽게 <b>팀의 위상</b>도 함께 높아졌습니다.</div>
+  </div>
+  <div class="st-media"><img src="img/team-focus.png" alt="함께 모여 집중하는 팀 — When we come together to focus, our team rises to the next level"/></div>
+  <div class="foot"><b>Ohouse Product Design</b><span>01 · Review → 02</span></div>
+</section>
+
+<!-- 10 DIVIDER 02 -->
+<section class="slide divider">
+  <div class="num serif">— 02 · WHAT —</div>
+  <div class="word serif">무엇에 집중할까</div>
+  <div class="dsub">2026년 하반기, 우리가 집중할&nbsp;것 — <b style="color:var(--blue-deep)">두 방향</b>으로 갑니다.<br/>① 우리가 더 빨라지고 더 많은 일을 하게, ② 다른 직군도 디자인할 수 있게.</div>
+</section>
+
+<!-- 11 MINDSET -->
+<section class="slide statement with-img">
+  <div class="st-text">
+    <div class="lead">각자 AI를 잘 쓰게 됐다면 — 이제</div>
+    <div class="punch serif">혼자 잘 쓰는&nbsp;것으로는<br/><b>부족합니다.</b></div>
+    <div class="note">우리 팀이 하나로 같이 뛰고, 같은 목표를 바라보는&nbsp;것. 따로 일하더라도 <b>같은 마인드셋</b>을 갖는&nbsp;것. 흩어진 18명의 속도를, 하나의 방향으로 모읍니다.</div>
+  </div>
+  <div class="st-media"><img src="img/team-highfive.png" alt="팀이 함께 하이파이브 — 혼자가 아니라 함께"/></div>
+  <div class="foot"><b>Ohouse Product Design</b><span>02 · WHAT</span></div>
+</section>
+
+<!-- 12 TWO DIRECTIONS -->
+<section class="slide">
+  <div class="head-wrap">
+    <span class="kicker">Two directions</span>
+    <h2 class="head">하반기, 우리는 두 방향으로 갑니다</h2>
+    <p class="sub">하나는 <b>우리 자신</b>을 향하고, 다른 하나는 <b>우리 바깥</b>을 향합니다. 두 방향이 함께 가야 의미가 있어요.</p>
+  </div>
+  <div class="two">
+    <div class="col inward">
+      <div class="clab">방향 ①</div>
+      <div class="cdir">우리가 더 빨라지고,<br/>더 많은 일을 하게</div>
+      <div class="ctext">워크플로우를 계속 혁신해 AI 활용을 <b>팀의 표준</b>으로. 나아가 디자이너가 <b>데이터 분석·전략·마케팅 디자인·개발</b>까지 손을 뻗는다.</div>
+      <span class="cway">↳ 안으로</span>
+    </div>
+    <div class="col outward">
+      <div class="clab">방향 ②</div>
+      <div class="cdir">다른 직군도<br/>디자인할 수 있게</div>
+      <div class="ctext">누구나 쉽게 만드는 환경 = <b>디자인 민주화 (Ohouse Design Site)</b>.</div>
+      <span class="cway">↳ 밖으로</span>
+    </div>
+  </div>
+  <div class="foot"><b>Ohouse Product Design</b><span>02 · WHAT</span></div>
+</section>
+
+<!-- 13 DIRECTION 1 -->
+<section class="slide statement with-img">
+  <div class="st-text">
+    <span class="kicker" style="margin-bottom:16px;display:block">Act 2 · 방향 ①</span>
+    <div class="lead">첫 번째 방향은, 우리 자신을 향합니다.</div>
+    <div class="punch serif">디자이너의 <b>일하는 방식 자체</b>를<br/>멈추지 않고 <b>계속 혁신</b>합니다.</div>
+    <div class="note">더 빨라질 뿐 아니라 <b>더 많은 일</b>을 — 데이터 분석·전략·마케팅 디자인·개발까지 손을 뻗습니다. AI 활용이 <b>팀의 표준</b>이 되고, 잘 굴러가면 끝내 <b>업계의 표준</b>이 됩니다.</div>
+  </div>
+  <div class="st-media"><img src="img/concept-a.webp" alt="AI를 제품 개발 워크플로우에 통합 — 6단계 다이어그램"/></div>
+  <div class="foot"><b>Ohouse Product Design</b><span>02 · WHAT</span></div>
+</section>
+
+<!-- 04 WORKFLOW MAP (moved to Act 2 · 방향 ①) -->
+<section class="slide">
+  <div class="head-wrap">
+    <span class="kicker">방향 ① · AI Workflow Map</span>
+    <h2 class="head">계속 진화시킬, 우리의 워크플로우 지도</h2>
+    <p class="sub">상반기에 PD 업무 전체를 <b>문제 정의 → 설계 → 검토 → 전달</b> 흐름의 <b>16개 과업</b>으로 분해한 지도. 이 지도를 멈추지 않고 계속 다듬고, AI 활용을 <b>팀의 표준</b>으로 굳혀갑니다.</p>
+  </div>
+  <div class="phases">
+    <div class="phase">
+      <h4>① Discovery & 가설</h4><div class="pn">문제 정의</div>
+      <div class="stack">
+        <span class="pill p0">Initiative-prioritizer</span>
+        <span class="pill p0">Hypothesis-builder</span>
+        <span class="pill p1">Data-interpreter</span>
+      </div>
+    </div>
+    <div class="phase">
+      <h4>② Design & Prototype</h4><div class="pn">설계</div>
+      <div class="stack">
+        <span class="pill p0">DS-prototype</span>
+        <span class="pill p1">UT-prototyping</span>
+        <span class="pill p0">State-edge-simulator</span>
+        <span class="pill p1">HTML-to-Figma-refiner</span>
+      </div>
+    </div>
+    <div class="phase">
+      <h4>③ Review & Critique</h4><div class="pn">검토</div>
+      <div class="stack">
+        <span class="pill p1">Design-critique <span class="qw">QUICK WIN</span></span>
+      </div>
+    </div>
+    <div class="phase">
+      <h4>④ Handoff & QA</h4><div class="pn">전달</div>
+      <div class="stack">
+        <span class="pill p0">Complete-handoff-doc</span>
+        <span class="pill p1">Design-QA</span>
+        <span class="pill p2">UX-writing</span>
+        <span class="pill p2">Responsive-support</span>
+      </div>
+    </div>
+  </div>
+  <div class="platform">
+    <div class="lbl">⌗ Platform Layer</div>
+    <div class="row">
+      <span class="pill p0">Design-pattern-library</span>
+      <span class="pill p1">Insight-archive <span class="qw">QUICK WIN</span></span>
+      <span class="pill p1">Team-toolkit</span>
+      <span class="pill p1">DESIGN.md</span>
+    </div>
+  </div>
+  <div class="legend">
+    <span><i style="background:linear-gradient(95deg,#1fb5a3,#5b54ec)"></i>P0 핵심 인프라·킬러 기능</span>
+    <span><i style="background:var(--blue-soft)"></i>P1 높은 임팩트</span>
+    <span><i style="background:#eef1f8;border:1px solid var(--line)"></i>P2 중기 확장</span>
+    <span style="margin-left:auto;color:var(--teal);font-weight:700">12 + 4 = 16개 과업 · 계속 진화 중</span>
+  </div>
+  <div class="foot"><b>Ohouse Product Design</b><span>02 · WHAT</span></div>
+</section>
+
+<!-- 15 DIRECTION 2 (vision + Design Site) -->
+<section class="slide">
+  <div class="head-wrap" style="margin-bottom:16px">
+    <span class="kicker">Act 2 · 방향 ②</span>
+    <h2 class="head">디자인을 '우리만'에서 → '모두가' 쉽게 만드는 환경으로</h2>
+    <p class="sub">하반기, 우리는 <b>Ohouse Design Site와 MCP</b>를 만듭니다. Mobbin처럼 <b>Copy prompt</b> 한 번으로 누구나 만들기 시작 — 도구의 평균(몸체)과 지식의 평균(두뇌)이 함께 떠받칩니다.</p>
+  </div>
+  <div class="blogshot" style="max-width:980px;margin:0 auto">
+    <img src="img/design-site.png" alt="Ohouse Design Site" loading="lazy"/>
+  </div>
+  <div class="foot"><b>Ohouse Product Design</b><span>02 · WHAT</span></div>
+</section>
+
+<!-- 15b BUILDERS TABLE -->
+<section class="slide">
+  <div class="head-wrap" style="margin-bottom:16px">
+    <span class="kicker">Who builds what · 핵심 빌더 9명</span>
+    <h2 class="head">이미, 각자 만들어가고 있습니다</h2>
+    <p class="sub">팀 18명 중 <b>핵심 빌더 9명</b>의 미션. <span class="dimmed">(1차 시작 기준 — 진행하며 조정)</span></p>
+  </div>
+  <table class="tbl">
+    <thead><tr><th style="width:150px">멤버</th><th style="width:32%">미션</th><th>골 · 산출물</th></tr></thead>
+    <tbody>
+      <tr><td><span class="nm"><span class="dot">T</span>Tyler</span></td><td><b>ODS MCP 업데이트</b></td><td>ods-hermes / prototype MCP에 최신 ODS 컴포넌트·패턴·파운데이션을 정합적으로 노출</td></tr>
+      <tr><td><span class="nm"><span class="dot">J</span>Jack</span></td><td><b>도메인(트랙) 컴포넌트 + 정책</b></td><td>CoMaker로 component design.md · 정책 문서가 함께 나오는 워크플로우</td></tr>
+      <tr><td><span class="nm"><span class="dot">J</span>Jina</span></td><td><b>Figma → 개발 친화 명세 변환</b></td><td>도메인 컴포넌트 외 나머지를 개발자가 이해하기 쉽게 정리하는 Figma 플러그인 + 스킬</td></tr>
+      <tr><td><span class="nm"><span class="dot">S</span>Stella</span></td><td><b>Screen 프로토타입 HTML 생성</b></td><td>diff 스킬로 화면 HTML 자동 생성 (ODS MCP · component design.md 기반)</td></tr>
+      <tr><td><span class="nm"><span class="dot">D</span>Deeer</span></td><td><b>정책 · Experiments 자동화</b></td><td>도메인별 트랙 정책 수집 + experiments md 생성 스킬</td></tr>
+      <tr><td><span class="nm"><span class="dot">J</span>Jenna</span></td><td><b>Knowledge 폴더 채우기</b></td><td>구조·플로우를 만드는 데 필요한 디자인 지식 정리 (룩앤필 외 영역)</td></tr>
+      <tr><td><span class="nm"><span class="dot">Y</span>Yohan</span></td><td><b>MCP 모니터링 · Design Context</b></td><td>domains·ods-docs·knowledge 연결 매주 체크 + 도메인 정책·자산 컨텍스트 수집</td></tr>
+      <tr><td><span class="nm"><span class="dot">S</span>Sun</span></td><td><b>Figma 없는 환경 팔로업</b></td><td>이 과정을 어떻게 따라갈지 + 3D 에셋 필요 상황에서 표준 이상 결과물</td></tr>
+      <tr><td><span class="nm"><span class="dot">S</span>Selah</span></td><td><b>PO 없는 환경 정책서 자동화</b></td><td>PO가 없는 환경에서 피그마로 정책서를 자동으로 만드는 법</td></tr>
+    </tbody>
+  </table>
+  <div class="foot"><b>Ohouse Product Design</b><span>02 · WHAT</span></div>
+</section>
+
+<!-- 16 PIPELINE BODY -->
+<section class="slide">
+  <div class="head-wrap">
+    <span class="kicker">방향 ② · 도구의 평균 (몸체)</span>
+    <h2 class="head">몸체 — 누구나 프로토타입을 만드는 길</h2>
+    <p class="sub">Figma를 LLM이 잘 읽고 프로토타입을 만들 수 있는 소스로. 네 사람의 작업이 하나의 흐름으로 연결됩니다.</p>
+  </div>
+  <div class="flow">
+    <div class="fnode"><div class="who"><span class="dot">T</span> Tyler</div><div class="ft">ODS 문서화 + MCP</div><div class="fd">ODS를 문서로 정리하고, 이를 노출하는 MCP를 만든다.</div><div class="out">ODS MCP</div></div>
+    <div class="farrow">→</div>
+    <div class="fnode"><div class="who"><span class="dot">J</span> Jack</div><div class="ft">트랙 컴포넌트화</div><div class="fd">ODS MCP를 연결, 화면 컴포넌트를 이름 규칙 + object_id로 묶어 하나의 트랙 컴포넌트로.</div><div class="out">Track Component</div></div>
+    <div class="farrow">→</div>
+    <div class="fnode"><div class="who"><span class="dot">J</span> Jina</div><div class="ft">페이지 정리</div><div class="fd">트랙 컴포넌트로 구성한 페이지의 프레임 네이밍·화면 정리, page_id · selection_id 부여.</div><div class="out">page_id · selection_id</div></div>
+    <div class="farrow">→</div>
+    <div class="fnode"><div class="who"><span class="dot">S</span> Stella</div><div class="ft">HTML 프로토타입</div><div class="fd">diff 스킬로 정리된 소스에서 프로토타입을 빠르게 시작할 HTML 화면 생성.</div><div class="out">HTML Prototype</div></div>
+  </div>
+  <p class="sub" style="margin-top:24px;max-width:none">→ ODS · 트랙 컴포넌트 · 정리된 Figma 화면이 갖춰지면, <b>누구나 그 위에서 프로토타입을 시작</b>할 수 있습니다.</p>
+  <div class="foot"><b>Ohouse Product Design</b><span>02 · WHAT</span></div>
+</section>
+
+<!-- 17 PIPELINE BRAIN -->
+<section class="slide">
+  <div class="head-wrap">
+    <span class="kicker">방향 ② · 두뇌</span>
+    <h2 class="head">두뇌 — 올바른 디자인 의사결정</h2>
+    <p class="sub">몸체가 '만드는 능력'이라면, 두뇌는 '올바르게 결정하는 기준'입니다. <b>Deeer · Jenna · Yohan</b>이 지식의 레이어를 쌓습니다.</p>
+  </div>
+  <div class="brain-grid">
+    <div class="bcard">
+      <h4><span class="who"><span class="dot">D</span></span> Deeer — 정책 · 실험</h4>
+      <ul>
+        <li>각 트랙의 정책을 도메인마다 모은다.</li>
+        <li>도메인마다 실험과 인사이트를 모은다.</li>
+      </ul>
+      <div class="link">↔ Jack과 연계 — 컴포넌트 정책과 도메인 정책이 겹치는 곳 정리.</div>
+    </div>
+    <div class="bcard">
+      <h4><span class="who"><span class="dot">J</span></span> Jenna — 인사이트 ↔ 지식</h4>
+      <ul>
+        <li>인사이트와 디자인 지식의 접점을 찾는다.</li>
+        <li>흩어진 지식을 구조·플로우 관점으로 엮는다.</li>
+      </ul>
+      <div class="link">룩앤필 외 — 구조·플로우를 만드는 지식 영역.</div>
+    </div>
+    <div class="bcard">
+      <h4><span class="who"><span class="dot">Y</span></span> Yohan — Design Knowledge</h4>
+      <ul>
+        <li>원칙 · 디자인 인사이트를 코드화한다.</li>
+        <li>UX · 비주얼 · 라이팅 디자인 지식을 정리한다.</li>
+        <li>의사결정 프레임워크로 '왜'를 남긴다.</li>
+      </ul>
+      <div class="link">knowledge 폴더 → Ohouse Design MCP로 노출. 전체 컨텍스트 매주 점검.</div>
+    </div>
+  </div>
+  <p class="sub" style="margin-top:20px;max-width:none">몸체(실행) + 두뇌(판단)가 하나로 닫히면 — <b>실행할 도구</b>와 <b>올바른 기준</b>이 한 바퀴로 순환합니다.</p>
+  <div class="foot"><b>Ohouse Product Design</b><span>02 · WHAT</span></div>
+</section>
+
+<!-- 18 KNOWLEDGE AVERAGE -->
+<section class="slide">
+  <div class="head-wrap">
+    <span class="kicker">방향 ② · 지식의 평균</span>
+    <h2 class="head">도구만으로는 부족합니다 — 지식의 평균도 높입니다</h2>
+    <p class="sub">누구나 쉽게 만들 수 있게 될수록, 디자이너가 <b>뒤에서 다듬는 일</b>이 오히려 늘어납니다. 도구만 쥐여주고 지식 격차를 방치하면, 평균을 높이려던 시도가 디자이너의 부담으로 되돌아와요.</p>
+  </div>
+  <div class="grid g3">
+    <div class="card"><div class="cname"><span class="who"><span class="dot">01</span></span> 누구나 올리는 크리틱</div><div class="cdesc"><b>#des_pd_design_critique</b>를 PD만이 아니라 PO를 비롯한 누구나 자기 화면을 올릴 수 있게 확장.</div><div class="who" style="color:var(--teal)">채널 확장</div></div>
+    <div class="card"><div class="cname"><span class="who"><span class="dot">02</span></span> 디자인 에이전트의 1차 피드백</div><div class="cdesc">사람에게 평가받기 전, 원칙·UX·비주얼 관점의 에이전트가 즉시 1차 피드백. 올리는 <b>심리적 부담</b>을 크게 낮춤.</div><div class="who" style="color:var(--teal)">완충 단계</div></div>
+    <div class="card"><div class="cname"><span class="who"><span class="dot">03</span></span> 우리의 판단을 코드화</div><div class="cdesc">2년간 PD가 남긴 판단 <b>198건</b>을 <b>10개 원칙 + 12개 인사이트</b>로. Ohouse Design MCP와 연결돼 실행–피드백 루프가 한 바퀴로 닫힘.</div><div class="who" style="color:var(--teal)">원칙 기반</div></div>
+  </div>
+  <div class="foot"><b>Ohouse Product Design</b><span>02 · WHAT</span></div>
+</section>
+
+<!-- 19 BIGNUM -->
+<section class="slide bignum">
+  <span class="kicker" style="margin-bottom:8px">1막은 우리를 빠르게, 2막은 임팩트를 크게</span>
+  <div class="n serif">10X</div>
+  <div class="ncap">같은 노력으로, 임팩트는 몇 배로 — 안목이 닿는 범위를 키운다</div>
+  <div class="compare-line">
+    <span>내 일을 남에게 넘기는 게 아니라</span>
+    <span class="vs">→</span>
+    <span>내 판단이 닿는 <b>무대 자체를 키우는&nbsp;것</b></span>
+  </div>
+  <div class="nsub">방향①(우리가 빨라지는&nbsp;것)은 1막에서 이미 닦았습니다. 그 위에서 같은 디자인 환경을 더 넓게 열수록, 디자이너의 안목과 판단이 닿는 <b>내 영향력의 무대</b>가 커집니다. 우선순위가 밀린 게 아니라, 이미 닦아둔 길 위에서 같은 안목을 더 넓은 무대에 펼치는&nbsp;것입니다.</div>
+  <div class="foot"><b>Ohouse Product Design</b><span>02 · WHAT</span></div>
+</section>
+
+<!-- 20 DIVIDER 03 -->
+<section class="slide divider">
+  <div class="num serif">— 03 · HOW —</div>
+  <div class="word serif">어떻게 해나갈까</div>
+  <div class="dsub">2026년 하반기, 그 환경 위에서 우리는 <b style="color:var(--blue-deep)">누가 되고, 어떻게 일하는가</b>.<br/>1막은 끝났지만 — 진짜 이야기는 지금부터입니다.</div>
+</section>
+
+<!-- 23 REFRAME -->
+<section class="slide statement with-img">
+  <div class="st-text">
+    <div class="lead">생각을 바꿔봅시다.</div>
+    <div class="punch serif">문제는 대체되는&nbsp;것이 아니라 —<br/><b>대체되지 않는 역량</b>을<br/>기르지 못하는&nbsp;것입니다.</div>
+    <div class="note">타직군의 이해도가 기대만큼 높아지지 않을 수도, 반대로 내 기여가 줄어 대체될 수도 있어요. 하지만 진짜 풀어야 할 질문은 '대체되느냐'가 아닙니다 — <b>어떤 상황에서도 대체되지 않는 역량</b>을 지금 기르는&nbsp;것, 그게 우리에게 남은 숙제입니다.</div>
+  </div>
+  <div class="st-media framed"><img src="img/soft-skill-top5.png" alt="2026 AI 역량 — 소프트 스킬 TOP 5 인포그래픽"/></div>
+  <div class="foot"><b>Ohouse Product Design</b><span>03 · HOW</span></div>
+</section>
+
+<!-- 24 BUILDER + LEADER POST -->
+<section class="slide">
+  <div class="head-wrap">
+    <span class="kicker">Act 3 · 그래서 디자이너는 누가 되는가</span>
+    <h2 class="head">디자이너는 결국, <span style="color:var(--blue)">프로덕트 빌더</span>가 됩니다</h2>
+    <p class="sub">누구나 디자인하는 환경 위에서, 디자이너는 '화면을 그리는 공정'에 머물지 않고 혼자서도 제품을 만들고 임팩트를 냅니다. 다른 PO의 디자인에 피드백을 주고, 내가 <b>기획·데이터까지 직접 끌고 가며</b> 일합니다 — 멀리 있는 남의 사례가 아니라, 우리가 이미 하고 있는 모습입니다.</p>
+  </div>
+  <div class="builder-img"><img src="img/product-builder.jpg" alt="Product Designer → Product Builder. The handoff is over."/></div>
+  <div class="foot"><b>Ohouse Product Design</b><span>03 · HOW</span></div>
+</section>
+
+<!-- 30 ACCOUNTABILITY -->
+<section class="slide statement with-img">
+  <div class="st-text">
+    <div class="lead">경계가 흐려진다고, 디자이너라는 역할이 흐려지는 건 아닙니다. 오히려 더 또렷해지는&nbsp;것 하나 —</div>
+    <div class="punch serif">누군가는 사용자 경험을 <b>결정</b>하고,<br/>그 결정에 <b>책임</b>을 져야 합니다.</div>
+    <div class="note">방사선과 의사가 여전히 필요한 이유는, 결국 '판독 결과에 서명하는 사람'이기 때문입니다. AI가 화면을 다 그려줘도 — 그것이 유저에게 정말 좋은 경험인지 판단하고 결정에 서명하는 일은 디자이너의 몫으로 남습니다. 빌더로서 끝까지 쥐고 있어야 할, 가장 단단한 중심이에요.</div>
+  </div>
+  <div class="st-media framed"><img src="img/ai-as-tool.png" alt="AI as Tool — Human in the loop. 결정과 책임은 사람의 몫"/></div>
+  <div class="foot"><b>Ohouse Product Design</b><span>03 · HOW</span></div>
+</section>
+
+<!-- 25 SQUAD DESIGN LEADER -->
+<section class="slide">
+  <div class="head-wrap">
+    <span class="kicker">Who we become · 일하는 구조</span>
+    <h2 class="head">스쿼드 안에서, 당신은 '디자인 리더'입니다</h2>
+    <p class="sub">모두가 <b>Product Builder</b>가 되지만, 뿌리는 다릅니다. PO·DA·PD 각자의 출신을 무기로 자기 영역을 <b>주도</b>하며 서로 리뷰·보완합니다. 그 안에서 <b>디자인을 끝까지 책임지고 끌고 가는 건 PD</b>입니다.</p>
+  </div>
+  <div class="roots">
+    <div class="root">
+      <span class="rr">PO 뿌리</span>
+      <div class="rb">기획·우선순위를<br/><b>주도</b></div>
+      <div class="rd">디자인·데이터로 영역을 넓힌다</div>
+    </div>
+    <div class="root">
+      <span class="rr">DA 뿌리</span>
+      <div class="rb">데이터·검증을<br/><b>주도</b></div>
+      <div class="rd">기획·UX로 영역을 넓힌다</div>
+    </div>
+    <div class="root lead">
+      <span class="rr">PD 뿌리 · 스쿼드의 디자인 리더</span>
+      <div class="rb">유저·경험·화면을 <b>주도</b></div>
+      <div class="rd">누구나 디자인하는 만큼 — <b>남의 디자인에도 더 높은 기준으로 피드백</b>하고, <b>유저를 직접 만나 의견을 내고 실행</b>하며, 기획·데이터까지 끌고 간다</div>
+    </div>
+  </div>
+  <div class="review-band">⇄ 각자 가장 강한 영역을 <b>주도</b>하고, 새 영역으로 넓히며 서로 리뷰·보완합니다 — 누구도 자기 무기를 내주지 않아요. 그리고 <b>디자인의 기준선은 PD가 지킵니다.</b></div>
+  <div class="foot"><b>Ohouse Product Design</b><span>03 · HOW</span></div>
+</section>
+
+<!-- 26 ATTITUDE CREED -->
+<section class="slide">
+  <div class="head-wrap" style="margin-bottom:18px">
+    <span class="kicker">What we protect together</span>
+    <h2 class="head">곧 AI는 누구나 잘 씁니다 — 그때부턴 <span style="color:var(--blue)">태도가 경쟁력</span></h2>
+    <p class="sub">도구 숙련도는 머지않아 모두의 평균이 됩니다. 그다음 사람과 사람을 가르는 건 결국 <b>일하는 태도</b>예요. 하반기에 우리가 함께 지킬 네 가지 —</p>
+  </div>
+  <div class="creed">
+    <div class="ci"><div class="cq">"안돼요" 대신 &rarr;<br/><b>"이렇게 하면 어때요?"</b></div><div class="cc">막기보다, 길을 먼저 제안합니다.</div></div>
+    <div class="ci"><div class="cq">네 일 &middot; 내 일 가르다 보면,<br/>결국 <b>'내일'</b>이 됩니다</div><div class="cc">경계를 따지는 사이 일은 미뤄져요. 그냥 같이 붙습니다.</div></div>
+    <div class="ci"><div class="cq">하고 싶은 일이 아니라,<br/><b>팀에 필요한 일</b>을 합니다</div><div class="cc">내 취향이 아니라 임팩트가 기준입니다.</div></div>
+    <div class="ci"><div class="cq">리소스는 늘 부족합니다 &mdash;<br/>그래서 <b>다른 방법</b>을 찾습니다</div><div class="cc">안 된다고 멈추는 대신, 우회로를 만듭니다.</div></div>
+  </div>
+  <div class="review-band" style="margin-top:18px">&rarr; 그래서 하반기엔 이 태도를 <b>우리가 함께 보는 기준</b>으로 둡니다 &mdash; '얼마나 잘 쓰나'가 아니라 '어떤 태도로 일하나'를.</div>
+  <div class="foot"><b>Ohouse Product Design</b><span>03 &middot; HOW</span></div>
+</section>
+
+<!-- 27 REPUTATION → STRATEGY (two-tier) -->
+<section class="slide">
+  <div class="head-wrap">
+    <span class="kicker">From reputation to strategy</span>
+    <h2 class="head">이미 잘하는 모습 위에, 한 걸음 더</h2>
+    <p class="sub">먼저 — 이미 우리 팀이 잘하고 있는 모습을 팀의 <b>기본값</b>으로. 그 위에서 내년엔 더 큰 질문을 던지는 팀으로.</p>
+  </div>
+  <div class="tier">
+    <div class="tierbox now">
+      <div class="tl">Good</div>
+      <div class="tierrow">
+        <div class="tchip">유저에게 먼저 다가간다<span>"유저를 만나러 먼저 가더라"</span></div>
+        <div class="tchip">아이디어 → 실행이 빠르다<span>"나오면 바로 만들어 보던데"</span></div>
+        <div class="tchip">제안을 먼저 한다<span>"받은 일만 하지 않더라"</span></div>
+        <div class="tchip">경계 없이 같이 붙는다<span>"네 일 내 일 안 가리더라"</span></div>
+      </div>
+    </div>
+    <div class="tierbox next">
+      <div class="tl">Excellent ↑</div>
+      <div class="tierrow three">
+        <div class="tchip">임팩트 중심으로 사고한다<span>'무엇이 임팩트를 내는가'에서 출발</span></div>
+        <div class="tchip">다음 스텝의 로드맵을 함께 그린다<span>내 화면 너머, 제품의 다음 스텝</span></div>
+        <div class="tchip">시장에서의 포지셔닝을 고민한다<span>시장에서 어떻게 이기는가까지</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><b>Ohouse Product Design</b><span>03 · HOW</span></div>
+</section>
+
+<!-- 28 TALENT PROFILE -->
+<section class="slide">
+  <div class="head-wrap">
+    <span class="kicker">디자이너 인재상</span>
+    <h2 class="head">이 시대가 찾는 디자이너 — <b style="color:var(--blue)">강한 제너럴리스트</b></h2>
+    <p class="sub">역할이 이렇게 바뀌는 환경에서 기본은 <b>회복탄력성과 유연함</b> — 새로운 방법과 도구를 기꺼이 시도하고 배우는 자세. 그 위에서 지금 특히 빛나는 세 유형이 있습니다.</p>
+  </div>
+  <div class="talent">
+    <div class="t-media">
+      <img src="img/skill-shapes.png" alt="T-shaped · Pi-shaped · Comb-shaped 스킬 프로파일"/>
+      <div class="t-cap">T자형을 넘어 <b>거의 블록(Comb) 모양</b>에 가까운 사람. 핵심 스킬 <b>여럿에서 상위 80% 수준</b>에 닿는, 드물고 귀한 프로파일.</div>
+    </div>
+    <div class="t-cards">
+      <div class="t-card lead-card">
+        <div class="t-h"><em>01</em> 강한 제너럴리스트 <span class="en">strong generalist</span></div>
+        <div class="t-d">이것저것 조금씩이 아니라, 핵심 스킬 몇 가지에서 <b>압도적으로 뛰어난</b> 사람. 디자인 역할이 PM·엔지니어링으로 뻗어나가는 지금, 그 <b>폭이 곧 차별화</b>가 됩니다.</div>
+      </div>
+      <div class="t-card">
+        <div class="t-h"><em>02</em> 깊은 전문가 <span class="en">deep specialist</span></div>
+        <div class="t-d">특정 영역에서 누구도 따라오기 어려운 <b>압도적 깊이</b>를 가진 사람. 그 전문성이 우리가 만드는 것을 <b>남다르게</b> 만듭니다.</div>
+      </div>
+      <div class="t-card">
+        <div class="t-h"><em>03</em> 유능한 신입 <span class="en">craft new grad</span></div>
+        <div class="t-d">커리어 초기지만 경험치 이상으로 현명하고 겸손한, <b>배움의 열의</b>가 강한 사람. 백지 상태에서 빠르게 배우고, 굳은 관습에 갇히지 않습니다.</div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><b>Ohouse Product Design</b><span>03 · HOW</span></div>
+</section>
+
+<!-- 29 TEAM PLAY → STATUS -->
+<section class="slide statement with-img">
+  <div class="st-text">
+    <div class="lead">우리가 함께 만들 진짜 결과는 —</div>
+    <div class="punch serif"><b>“오늘의집 PD는<br/>○○○한 것 같아”</b>라고<br/>느끼게 만드는&nbsp;것.</div>
+    <div class="note">한 사람의 인상이 아니라, <b>팀 전체가 하나의 키워드</b>로 각인되는&nbsp;것. 먼저 다가가고, 먼저 제안하고, 끝까지 함께 만드는 — 그 태도가 모여 주변 동료의 머릿속에 <b>'오늘의집 프로덕트 디자이너'라는 한 단어</b>를 남깁니다. 그게 <b>팀의 위상</b>이 올라가는 길이고, 결국 우리에게 <b>더 많은 권한과 기회</b>로 돌아옵니다.</div>
+  </div>
+  <div class="st-media"><img src="img/peer-recognition.png" alt="동료들이 인정하는 모습 — 하나의 키워드로 각인된 PD"/></div>
+  <div class="foot"><b>Ohouse Product Design</b><span>03 · HOW</span></div>
+</section>
+
+<!-- 32 HERO -->
+<section class="slide hero">
+  <div class="hk">지금이, 보여줄 때</div>
+  <div class="hq serif">AI를 잘 쓰는 것을 넘어 —<br/>이제 <em>적극적인 태도</em>를 보여줄 때.</div>
+  <div class="hsub">AI를 잘 다루는 건 머지않아 누구나 하게 됩니다. 그다음 우리를 가르는 건 — <b>먼저 다가가고, 먼저 제안하고, 경계 없이 협업하는</b> 적극적인 태도. 그게 진짜 경쟁력이 되고, 지금이 바로 그걸 <b>보여줄 때</b>입니다.</div>
+  <div class="foot"><b>Ohouse Product Design</b><span>Attitude is the edge</span></div>
+</section>
+
+<!-- 33 END -->
+<section class="slide end">
+  <div class="big serif">함께, <em>2026 하반기</em>도<br/>잘 만들어가요.</div>
+  <div class="esub">개인의 속도에서 → 팀의 방향으로. 같은 목표, 같은 마인드셋으로.<br/>지금부터가, 진짜 시작입니다.</div>
+  <div class="rule"></div>
+  <div class="meta" style="margin-top:26px;color:var(--muted);font-size:14px">Ohouse Product Design · 2026 H2</div>
+</section>
+
+</div>
+<div class="hint">↓ / Space · 화살표로 이동</div>
+<script>
+const deck=document.getElementById('deck');
+const prog=document.getElementById('prog');
+const slides=[...document.querySelectorAll('.slide')];
+function update(){
+  const i=Math.round(deck.scrollTop/window.innerHeight);
+  prog.style.width=((i)/(slides.length-1)*100)+'%';
+}
+deck.addEventListener('scroll',update,{passive:true});
+function go(d){
+  const i=Math.round(deck.scrollTop/window.innerHeight);
+  const n=Math.max(0,Math.min(slides.length-1,i+d));
+  deck.scrollTo({top:n*window.innerHeight,behavior:'smooth'});
+}
+window.addEventListener('keydown',e=>{
+  if(['ArrowDown','PageDown',' '].includes(e.key)){e.preventDefault();go(1);}
+  if(['ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(-1);}
+  if(e.key==='Home'){deck.scrollTo({top:0,behavior:'smooth'});}
+  if(e.key==='End'){deck.scrollTo({top:slides.length*window.innerHeight,behavior:'smooth'});}
+});
+update();
+setTimeout(()=>{const h=document.querySelector('.hint');if(h)h.style.transition='opacity 1s';},4000);
+</script>
+</body>
+</html>
