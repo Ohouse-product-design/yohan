@@ -80,52 +80,62 @@ window.DATA = {
     { name: '인터넷',     glyph: '📶' },
   ],
 
-  // ── 개편안: 이사 D-day 시나리오 ────────────────────
-  // 같은 탭이 유저의 시점에 따라 다른 얼굴을 갖는다는 걸 보여주는 축
-  phases: [
+  // ── 개편안: 견적 트래커 상태 ──────────────────────
+  // 이사플래너(~2024, sunset 2025-08)의 회고 결론 — "일정 알림보다
+  // 업체 추천/견적 비교가 핵심이었다" — 을 축으로 삼는다.
+  // 진행률/체크리스트가 아니라, 실제로 요청한 견적의 응답 상태가
+  // 재방문 이유를 만든다. 업체 답을 기다리는 시간은 실재하므로.
+  quotes: [
     {
-      id: 'd45', dday: 45, label: 'D-45',
-      stage: '업체 비교할 때',
-      blurb: '견적을 3곳 이상 받아보면 평균가가 보여요',
-      done: 4, total: 14,
-      tasks: [
-        { t: '우리집 예상 견적 계산하기', s: '3분이면 끝나요', to: '견적계산기' },
-        { t: '봇들마을 시공사례 훑어보기', s: '같은 평형 28건', to: '시공사례' },
-        { t: '업체 3곳 비교 견적 받기', s: '아직 0곳', to: '업체찾기' },
+      id: 'empty', label: '견적 0',
+      kind: 'empty',
+      title: '견적, 한 번에 받아보세요',
+      sub: '이사 일정만 알려주시면 필요한 업체 견적을 모아드려요',
+      picks: [
+        { name: '전체시공', glyph: '🏠', on: true },
+        { name: '이사',     glyph: '📦', on: true },
+        { name: '입주청소', glyph: '🧼', on: false },
+        { name: '인터넷',   glyph: '📶', on: false },
       ],
+      cta: '선택한 2개 견적 요청하기',
     },
     {
-      id: 'd20', dday: 20, label: 'D-20',
-      stage: '계약하고 일정 잡을 때',
-      blurb: '이 시점 유저의 71%가 계약서를 검토했어요',
-      done: 8, total: 14,
-      tasks: [
-        { t: '계약서 체크리스트 확인', s: '표준계약서 대조 8항목', to: '계약가이드' },
-        { t: '시공 일정 조율하기', s: '입주일 역산 필요', to: '일정관리' },
-        { t: '입주청소 예약', s: '3주 전 예약이 평균', to: '입주청소' },
+      id: 'waiting', label: '응답 대기',
+      kind: 'tracking',
+      category: '전체시공',
+      title: '내 견적',
+      sub: '3곳 요청 · 1곳 도착 · 2곳 대기중',
+      rows: [
+        { vendor: '디자인트리',   std: true,  amount: 4180, status: 'in',   note: '방금 도착', fresh: true },
+        { vendor: '아솔랩 디자인', std: false, amount: null, status: 'wait', note: '보통 2일 걸려요' },
+        { vendor: '오느른 디자인', std: true,  amount: null, status: 'wait', note: '보통 2일 걸려요' },
       ],
+      cta: '견적 더 받기',
     },
     {
-      id: 'd5', dday: 5, label: 'D-5',
-      stage: '이사 준비 마무리할 때',
-      blurb: '인터넷은 설치까지 평균 4일 걸려요',
-      done: 11, total: 14,
-      tasks: [
-        { t: '인터넷 설치 예약', s: '지금 예약해야 입주일에 맞아요', to: '인터넷' },
-        { t: '가전 배송일 맞추기', s: '냉장고 1건 · 세탁기 1건', to: '가전렌탈' },
-        { t: '이사 견적 확정', s: '2곳 받음 · 미확정', to: '이사견적' },
+      id: 'compare', label: '비교',
+      kind: 'tracking',
+      category: '전체시공',
+      title: '내 견적',
+      sub: '3곳 모두 도착 · 비교해보세요',
+      rows: [
+        { vendor: '아솔랩 디자인', std: false, amount: 3980, status: 'in', tag: '최저' },
+        { vendor: '디자인트리',   std: true,  amount: 4180, status: 'in' },
+        { vendor: '오느른 디자인', std: true,  amount: 4480, status: 'in' },
       ],
+      cta: '항목별 비교표 보기',
     },
     {
-      id: 'after', dday: -12, label: '입주 후',
-      stage: '집을 채워갈 때',
-      blurb: '하자 보수 요청은 입주 30일 내가 가장 잘 받아들여져요',
-      done: 12, total: 14,
-      tasks: [
-        { t: '하자 체크리스트 점검', s: '입주 30일 내 요청', to: '하자접수' },
-        { t: '우리집 사진 올리기', s: '집들이 작성하고 포인트 받기', to: '집들이' },
-        { t: '가구 배치 시뮬레이션', s: '3D로 미리 놓아보기', to: '3D배치' },
+      id: 'after', label: '계약 후',
+      kind: 'contracted',
+      category: '전체시공',
+      title: '전체시공 · 디자인트리',
+      sub: '4,180만원 · 10월 2일 착공',
+      remaining: [
+        { name: '입주청소', glyph: '🧼', hint: '보통 3주 전에 예약해요' },
+        { name: '인터넷',   glyph: '📶', hint: '설치까지 평균 4일' },
       ],
+      cta: '남은 견적 한 번에 받기',
     },
   ],
 

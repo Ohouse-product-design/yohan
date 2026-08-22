@@ -1,6 +1,6 @@
 // ===== Root — 현재안 / 개편안 / 나란히 비교 =====
 
-function ControlBar({ mode, setMode, phaseId, setPhaseId, ann, setAnn }) {
+function ControlBar({ mode, setMode, quoteId, setQuoteId, ann, setAnn }) {
   return (
     <div className="controls">
       <div className="seg">
@@ -11,10 +11,10 @@ function ControlBar({ mode, setMode, phaseId, setPhaseId, ann, setAnn }) {
 
       {mode !== 'current' && (
         <>
-          <span className="ctl-label">시나리오</span>
-          {window.DATA.phases.map(p => (
-            <button key={p.id} className={`ctl-chip ${phaseId === p.id ? 'on' : ''}`}
-                    onClick={() => setPhaseId(p.id)}>{p.label}</button>
+          <span className="ctl-label">견적 상태</span>
+          {window.DATA.quotes.map(q => (
+            <button key={q.id} className={`ctl-chip ${quoteId === q.id ? 'on' : ''}`}
+                    onClick={() => setQuoteId(q.id)}>{q.label}</button>
           ))}
         </>
       )}
@@ -28,7 +28,7 @@ function ControlBar({ mode, setMode, phaseId, setPhaseId, ann, setAnn }) {
 
 function Root() {
   const [mode, setMode] = React.useState('redesign');
-  const [phaseId, setPhaseId] = React.useState('d45');
+  const [quoteId, setQuoteId] = React.useState('waiting');
   const [ann, setAnn] = React.useState(false);
   const [scale, setScale] = React.useState(1);
 
@@ -62,7 +62,7 @@ function Root() {
       <IOSDevice width={402} height={874}>
         {which === 'current'
           ? <CurrentScreen/>
-          : <RedesignScreen phaseId={phaseId} setPhaseId={setPhaseId}/>}
+          : <RedesignScreen quoteId={quoteId}/>}
       </IOSDevice>
     </div>
   );
@@ -72,7 +72,7 @@ function Root() {
       width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column',
       alignItems: 'center', background: '#23232a', overflow: 'hidden',
     }}>
-      <ControlBar mode={mode} setMode={setMode} phaseId={phaseId} setPhaseId={setPhaseId}
+      <ControlBar mode={mode} setMode={setMode} quoteId={quoteId} setQuoteId={setQuoteId}
                   ann={ann} setAnn={setAnn}/>
       <div style={{
         flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
