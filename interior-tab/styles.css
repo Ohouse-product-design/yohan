@@ -1,0 +1,164 @@
+/* ===== Ohouse design tokens (shared with apartment-ex) ===== */
+:root {
+  --ohouse-blue: #1A86FF;
+  --ohouse-blue-light: #E3F0FF;
+  --ohouse-blue-deep: #0E6BDB;
+  --ohouse-teal: #35C5F0;
+  --ohouse-orange: #FF7900;
+  --text-primary: #141414;
+  --text-secondary: #424242;
+  --text-tertiary: #757575;
+  --text-quaternary: #BCBCBC;
+  --bg: #ffffff;
+  --bg-soft: #F7F9FA;
+  --bg-card: #FAFAFA;
+  --border: #E0E0E0;
+  --border-strong: #DCDCDC;
+  --danger: #F1554C;
+  --tag-bg: #F4F4F4;
+  --tag-text: #393939;
+
+  /* annotation layer */
+  --ann-bad: #E5484D;
+  --ann-good: #12855B;
+
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --r-xl: 20px;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; padding: 0; }
+button:focus, button:focus-visible { outline: none; }
+
+body {
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', system-ui, sans-serif;
+  color: var(--text-primary);
+  background: #23232a;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+}
+button { background: none; border: 0; padding: 0; font: inherit; color: inherit; cursor: pointer; }
+
+/* ===== App shell inside the iOS frame ===== */
+.app {
+  width: 100%; height: 100%;
+  background: var(--bg);
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.scroll {
+  flex: 1; overflow-y: auto; overflow-x: hidden;
+  -webkit-overflow-scrolling: touch; background: var(--bg);
+  scroll-behavior: smooth;
+}
+.scroll::-webkit-scrollbar { width: 0; }
+
+/* ===== Global app bar (search row) ===== */
+.appbar {
+  display: flex; align-items: center; gap: 10px;
+  padding: 58px 14px 10px; background: #fff;
+  border-bottom: 1px solid #F0F0F0;
+  flex-shrink: 0;
+}
+.appbar .searchbox {
+  flex: 1; height: 38px; border-radius: 19px; background: #F5F6F7;
+  display: flex; align-items: center; gap: 7px; padding: 0 13px;
+  font-size: 13.5px; color: #9A9A9A; min-width: 0;
+}
+.appbar .searchbox span {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.appbar .icons { display: flex; gap: 11px; color: #2B2B2B; flex-shrink: 0; }
+
+/* ===== Bottom nav ===== */
+.bottomnav {
+  height: 78px; flex-shrink: 0;
+  border-top: 1px solid #EFEFEF; background: #fff;
+  display: flex; align-items: center; justify-content: space-around;
+  padding-bottom: 22px;
+}
+.bottomnav button {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  flex: 1; height: 100%;
+}
+
+/* ===== Section primitives ===== */
+.sec { padding: 22px 16px 4px; }
+.sec-h {
+  font-size: 18px; font-weight: 700; letter-spacing: -0.03em;
+  margin: 0 0 12px; line-height: 1.3;
+}
+.sec-sub {
+  font-size: 13px; color: var(--text-tertiary);
+  margin: -8px 0 12px; line-height: 1.4;
+}
+.divider { height: 8px; background: #F5F6F7; margin-top: 20px; }
+
+/* chips */
+.chiprow { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; }
+.chiprow::-webkit-scrollbar { height: 0; }
+.chip {
+  flex-shrink: 0; height: 36px; padding: 0 17px; border-radius: 18px;
+  border: 1px solid var(--border); font-size: 14px; font-weight: 500;
+  display: flex; align-items: center; background: #fff; color: #2B2B2B;
+}
+.chip.on { background: #2F3438; border-color: #2F3438; color: #fff; font-weight: 600; }
+
+/* horizontal card rails */
+.rail { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 4px; }
+.rail::-webkit-scrollbar { height: 0; }
+
+.morebtn {
+  width: 100%; height: 48px; margin-top: 14px;
+  border: 1px solid var(--border); border-radius: var(--r-md);
+  display: flex; align-items: center; justify-content: center; gap: 4px;
+  font-size: 14.5px; font-weight: 600; color: #2B2B2B;
+}
+
+/* ===== Annotation layer ===== */
+.ann {
+  position: relative;
+  border: 1.5px dashed transparent; border-radius: 8px;
+}
+body.ann-on .ann.bad  { border-color: rgba(229,72,77,0.55); background: rgba(229,72,77,0.045); }
+body.ann-on .ann.good { border-color: rgba(18,133,91,0.5); background: rgba(18,133,91,0.04); }
+body.ann-on .ann { padding-top: 15px; }
+body.ann-on .ann.pos-bottom { padding-top: 0; padding-bottom: 15px; }
+.ann-tag {
+  display: none;
+  position: absolute; top: -1px; left: 8px; z-index: 30;
+  font-size: 10px; font-weight: 700; letter-spacing: -0.01em;
+  padding: 2px 7px; border-radius: 999px; color: #fff; white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+body.ann-on .ann-tag { display: block; }
+.ann-tag.at-bottom { top: auto; bottom: -1px; }
+.ann-tag.bad  { background: var(--ann-bad); }
+.ann-tag.good { background: var(--ann-good); }
+
+/* ===== Control bar (outside the device) ===== */
+.controls {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  justify-content: center; padding: 14px 16px 0;
+}
+.seg {
+  display: flex; background: rgba(255,255,255,0.09); border-radius: 10px; padding: 3px;
+  border: 1px solid rgba(255,255,255,0.13);
+}
+.seg button {
+  padding: 7px 16px; border-radius: 7px; font-size: 13px; font-weight: 600;
+  color: rgba(255,255,255,0.62); letter-spacing: -0.01em; white-space: nowrap;
+}
+.seg button.on { background: #fff; color: #16181d; }
+.ctl-chip {
+  padding: 7px 13px; border-radius: 8px; font-size: 12.5px; font-weight: 600;
+  color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.05); white-space: nowrap;
+}
+.ctl-chip.on { background: var(--ohouse-blue); border-color: var(--ohouse-blue); color: #fff; }
+.ctl-label {
+  font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.34);
+  letter-spacing: 0.04em; text-transform: uppercase; margin-right: -4px;
+}
