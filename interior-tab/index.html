@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>오늘의집 · 인테리어/생활 탭 개편안</title>
+  <template id="__bundler_thumbnail" data-bg-color="#1A86FF">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <g transform="translate(100 100)" fill="#fff">
+        <rect x="-52" y="-52" width="46" height="46" rx="10"/>
+        <rect x="6" y="-52" width="46" height="46" rx="10" opacity="0.55"/>
+        <rect x="-52" y="6" width="46" height="46" rx="10" opacity="0.55"/>
+        <rect x="6" y="6" width="46" height="46" rx="10" opacity="0.3"/>
+      </g>
+    </svg>
+  </template>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css"/>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- React + Babel -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+
+  <!-- iOS frame -->
+  <script type="text/babel" src="ios-frame.jsx"></script>
+
+  <!-- Data + icons -->
+  <script src="data.js"></script>
+  <script type="text/babel" src="icons.jsx"></script>
+
+  <!-- Shared UI pieces -->
+  <script type="text/babel" src="screens/shell.jsx"></script>
+
+  <!-- Screens -->
+  <script type="text/babel" src="screens/current.jsx"></script>
+  <script type="text/babel" src="screens/redesign.jsx"></script>
+
+  <!-- App root -->
+  <script type="text/babel" src="app.jsx"></script>
+</body>
+</html>
