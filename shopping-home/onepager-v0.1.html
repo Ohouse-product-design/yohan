@@ -1,0 +1,482 @@
+<title>구좌에서 여정으로</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap">
+<style>
+  :root {
+    --bg: #F7F9FA;
+    --surface: #FFFFFF;
+    --ink: #17232B;
+    --muted: #55676F;
+    --line: #DCE4E8;
+    --accent: #0E87BD;
+    --accent-ink: #0A6E9B;
+    --accent-soft: #E3F4FC;
+    --warm: #C2622E;
+    --warm-ink: #A54F20;
+    --warm-soft: #FBEEE4;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F171C;
+      --surface: #16222A;
+      --ink: #E5EDF1;
+      --muted: #93A6B0;
+      --line: #24323A;
+      --accent: #53C6F0;
+      --accent-ink: #7DD4F5;
+      --accent-soft: #12303E;
+      --warm: #E39066;
+      --warm-ink: #ECA783;
+      --warm-soft: #2E2019;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F171C;
+    --surface: #16222A;
+    --ink: #E5EDF1;
+    --muted: #93A6B0;
+    --line: #24323A;
+    --accent: #53C6F0;
+    --accent-ink: #7DD4F5;
+    --accent-soft: #12303E;
+    --warm: #E39066;
+    --warm-ink: #ECA783;
+    --warm-soft: #2E2019;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    font-size: 16px;
+    line-height: 1.78;
+    margin: 0;
+    padding: 0 24px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 64px 0 96px;
+  }
+
+  /* ---------- header ---------- */
+  .doc-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .doc-meta .tag {
+    color: var(--accent-ink);
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    padding: 1px 12px;
+    font-weight: 500;
+  }
+  .doc-meta .sep { color: var(--line); }
+  h1 {
+    font-family: "Gowun Batang", "Nanum Myeongjo", serif;
+    font-size: clamp(34px, 6vw, 46px);
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    margin: 0 0 16px;
+    text-wrap: balance;
+  }
+  .lede {
+    font-size: 18px;
+    color: var(--muted);
+    margin: 0 0 8px;
+    text-wrap: balance;
+  }
+
+  /* ---------- sections ---------- */
+  section { margin-top: 64px; }
+  h2 {
+    font-family: "Gowun Batang", "Nanum Myeongjo", serif;
+    font-size: 25px;
+    font-weight: 700;
+    line-height: 1.4;
+    margin: 0 0 18px;
+    text-wrap: balance;
+  }
+  .eyebrow {
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--accent-ink);
+    margin: 0 0 6px;
+  }
+  p { margin: 0 0 16px; }
+  strong { font-weight: 700; }
+  em { font-style: normal; font-weight: 700; color: var(--accent-ink); }
+
+  .thesis {
+    font-family: "Gowun Batang", serif;
+    font-size: 21px;
+    line-height: 1.65;
+    font-weight: 700;
+    border-left: 3px solid var(--accent);
+    padding: 6px 0 6px 22px;
+    margin: 28px 0;
+    text-wrap: balance;
+  }
+
+  .evidence {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 22px;
+    font-size: 15px;
+    margin: 20px 0;
+  }
+  .evidence .num {
+    font-family: "Gowun Batang", serif;
+    font-size: 26px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .evidence-row {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .evidence-row > div { flex: 1 1 180px; }
+  .evidence .cap { color: var(--muted); font-size: 13.5px; line-height: 1.6; margin-top: 2px; }
+
+  /* ---------- zones ---------- */
+  .zones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 24px 0 8px;
+  }
+  @media (max-width: 620px) { .zones { grid-template-columns: 1fr; } }
+  .zone {
+    border-radius: 12px;
+    padding: 22px 24px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+  }
+  .zone.urgency { border-top: 4px solid var(--warm); }
+  .zone.confidence { border-top: 4px solid var(--accent); }
+  .zone .zone-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    margin-bottom: 4px;
+  }
+  .zone.urgency .zone-label { color: var(--warm-ink); }
+  .zone.confidence .zone-label { color: var(--accent-ink); }
+  .zone h3 {
+    font-family: "Gowun Batang", serif;
+    font-size: 20px;
+    margin: 0 0 12px;
+    line-height: 1.4;
+  }
+  .zone dl { margin: 0; font-size: 14.5px; }
+  .zone dt { font-weight: 700; color: var(--muted); font-size: 12.5px; margin-top: 12px; }
+  .zone dd { margin: 2px 0 0; }
+  .zone .no {
+    text-decoration: line-through;
+    text-decoration-thickness: 1.5px;
+    color: var(--muted);
+  }
+  .zone.urgency dd .yes { color: var(--warm-ink); font-weight: 700; }
+  .zone.confidence dd .yes { color: var(--accent-ink); font-weight: 700; }
+
+  /* ---------- team mapping ---------- */
+  .team {
+    display: grid;
+    grid-template-columns: 148px 1fr;
+    gap: 20px;
+    padding: 22px 0;
+    border-top: 1px solid var(--line);
+  }
+  .team:last-of-type { border-bottom: 1px solid var(--line); }
+  @media (max-width: 620px) { .team { grid-template-columns: 1fr; gap: 6px; padding: 18px 0; } }
+  .team .who {
+    font-family: "Gowun Batang", serif;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+  .team .who .role { display: block; font-family: "IBM Plex Sans KR", sans-serif; font-size: 12.5px; font-weight: 500; color: var(--muted); margin-top: 2px; }
+  .team p { font-size: 15px; margin: 0 0 10px; }
+  .team p:last-child { margin-bottom: 0; }
+  .shift {
+    font-size: 13.5px;
+    color: var(--muted);
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 8px 14px;
+    display: inline-block;
+  }
+  .shift b { color: var(--ink); font-weight: 700; }
+
+  /* ---------- bridge callout ---------- */
+  .bridge {
+    background: linear-gradient(to right, var(--warm-soft), var(--accent-soft));
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 26px 28px;
+    margin: 24px 0;
+  }
+  .bridge h3 {
+    font-family: "Gowun Batang", serif;
+    font-size: 20px;
+    margin: 0 0 10px;
+  }
+  .bridge p { font-size: 15px; margin-bottom: 10px; }
+  .bridge p:last-child { margin-bottom: 0; }
+  .bridge .example {
+    font-size: 14.5px;
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 10px 16px;
+    display: inline-block;
+    border: 1px solid var(--line);
+  }
+
+  /* ---------- table ---------- */
+  .table-wrap { overflow-x: auto; margin: 20px 0; }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 540px;
+    font-size: 14.5px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  th, td {
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+  th {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--muted);
+    background: var(--bg);
+  }
+  tr:last-child td { border-bottom: none; }
+  td:first-child { font-weight: 700; white-space: nowrap; }
+
+  /* ---------- lists ---------- */
+  ul.qs { padding-left: 0; list-style: none; margin: 16px 0; }
+  ul.qs li {
+    padding: 14px 0 14px 30px;
+    border-top: 1px solid var(--line);
+    position: relative;
+    font-size: 15px;
+  }
+  ul.qs li:last-child { border-bottom: 1px solid var(--line); }
+  ul.qs li::before {
+    content: "?";
+    font-family: "Gowun Batang", serif;
+    font-weight: 700;
+    color: var(--accent-ink);
+    position: absolute;
+    left: 4px;
+    top: 13px;
+  }
+
+  ol.steps { counter-reset: step; list-style: none; padding: 0; margin: 20px 0 0; }
+  ol.steps li {
+    counter-increment: step;
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 16px;
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+    font-size: 15px;
+  }
+  ol.steps li::before {
+    content: counter(step);
+    font-family: "Gowun Batang", serif;
+    font-size: 21px;
+    font-weight: 700;
+    color: var(--accent-ink);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.3;
+  }
+  ol.steps li b { display: block; }
+  ol.steps .owner {
+    font-size: 12.5px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  footer {
+    margin-top: 72px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+</style>
+
+<div class="page">
+  <header>
+    <div class="doc-meta">
+      <span class="tag">쇼핑홈 개편 킥오프 제안 · 논의용 초안 v0.1</span>
+      <span class="sep">|</span>
+      <span>2026.08.24</span>
+      <span class="sep">|</span>
+      <span>Yohan · Product Design</span>
+    </div>
+    <h1>구좌에서 여정으로</h1>
+    <p class="lede">쇼핑홈의 단위를 프로모션 구좌에서 유저의 구매 상태로 바꾸면, 영업·SM·프로덕트가 같은 지면을 놓고 경쟁하는 구조 자체가 사라집니다.</p>
+  </header>
+
+  <section>
+    <p class="eyebrow">WHY NOW</p>
+    <h2>방금 겪은 갈등이 문제를 정확히 보여줬다</h2>
+    <p>8월 집요세 타임머신 특가에서, 우리는 선착순 쿠폰을 가구 상품 PDP에 노출할지를 두고 세 팀이 긴 논쟁을 했습니다. 예외 승인으로 봉합됐지만, 그 과정에서 나온 데이터는 봉합할 수 없는 사실 하나를 남겼습니다.</p>
+    <div class="evidence">
+      <div class="evidence-row">
+        <div>
+          <span class="num">10건 미만</span>
+          <p class="cap">가구 카테고리 대부분 상품의 쿠폰 적용 구매 수. 쿠폰 미적용 구매가 적용 구매보다 많았다.</p>
+        </div>
+        <div>
+          <span class="num">~100%</span>
+          <p class="cap">쿠폰 존재를 인지한 유저의 구매 시 쿠폰 적용률. 알면 전원이 쓴다 — 몰라서 못 쓴다.</p>
+        </div>
+      </div>
+      <p class="cap" style="margin-top:14px;">— 영업팀 공유 데이터, 집요세 타임머신 특가 4일차 기준</p>
+    </div>
+    <p>즉, 쿠폰이 효과가 없는 게 아니라 <strong>쿠폰이 만들 수 없는 수요에 쿠폰을 투입하고 있었습니다.</strong> 가구는 "지금 사라"는 신호(할인·한정수량)로 없던 구매 의사가 생기는 카테고리가 아닙니다. 공간이 맞는지, 실물이 어떤지, 배송·설치는 어떻게 되는지 — 결정에 시간이 필요한 고관여 상품입니다.</p>
+    <p>이 논쟁이 소모적이었던 근본 원인은 사람이 아니라 화면 구조에 있습니다.</p>
+    <p class="thesis">지금의 쇼핑홈은 '유저의 쇼핑 여정'이 아니라 '우리 조직의 구좌 목록'으로 구성되어 있다.</p>
+    <p>스페셜딜, 타임머신 특가, 기획전, 장쿠 — 내부 팀과 예산 단위가 화면에 그대로 투영된 구조입니다. 구좌가 화면의 단위인 한, 각 팀은 서로의 구좌 위치와 순서를 놓고 협상할 수밖에 없고, 그 협상은 항상 제로섬입니다. 구좌를 재배치하는 개편은 이 싸움의 판만 바꿉니다. <strong>판을 없애려면 화면의 단위를 바꿔야 합니다.</strong></p>
+  </section>
+
+  <section>
+    <p class="eyebrow">PROPOSAL</p>
+    <h2>쇼핑홈을 두 개의 존으로 재구성한다</h2>
+    <p>유저가 쇼핑홈에 오는 이유는 크게 둘입니다. 좋은 딜을 구경하러 오거나, 이미 마음에 둔 물건의 결정을 진전시키러 오거나. 지금 쇼핑홈은 앞의 유저만 맞이하고 있습니다.</p>
+    <div class="zones">
+      <div class="zone urgency">
+        <div class="zone-label">ZONE 1 · URGENCY</div>
+        <h3>지금 사도 되는 이유를 주는 곳</h3>
+        <dl>
+          <dt>대상 유저</dt>
+          <dd>딜 헌팅 · 아이쇼핑으로 방문한 유저</dd>
+          <dt>대상 카테고리</dt>
+          <dd>저관여 · 가격탄력이 높은 상품 — 소품, 생활용품, 표준화된 가전</dd>
+          <dt>작동하는 도구</dt>
+          <dd><span class="yes">타임딜 · 선착순 쿠폰 · 특가</span></dd>
+          <dt>작동하지 않는 도구</dt>
+          <dd><span class="no">긴 탐색 콘텐츠</span></dd>
+        </dl>
+      </div>
+      <div class="zone confidence">
+        <div class="zone-label">ZONE 2 · CONFIDENCE</div>
+        <h3>사도 된다는 확신을 주는 곳</h3>
+        <dl>
+          <dt>대상 유저</dt>
+          <dd>특정 구매를 고민 중인 유저 — 가구 고객 대부분</dd>
+          <dt>대상 카테고리</dt>
+          <dd>고관여 · 고단가 상품 — 가구, 대형가전</dd>
+          <dt>작동하는 도구</dt>
+          <dd><span class="yes">공간 맥락 · 비교 · 리뷰 · 배송/설치 정보 · 스크랩 이어보기</span></dd>
+          <dt>작동하지 않는 도구</dt>
+          <dd><span class="no">선착순 쿠폰 (이번에 데이터로 확인)</span></dd>
+        </dl>
+      </div>
+    </div>
+    <p style="font-size:14px; color:var(--muted);">관여도 축은 감이 아니라 데이터로 세웁니다 — 첫 조회→구매 리드타임, 재방문 횟수, 스크랩→구매 전환을 카테고리별로 측정해 배치 룰을 만듭니다.</p>
+  </section>
+
+  <section>
+    <p class="eyebrow">ALIGNMENT</p>
+    <h2>세 팀의 목표가 한 구조에 얹힌다</h2>
+    <div class="team">
+      <div class="who">SM팀<span class="role">Urgency 존의 주인</span></div>
+      <div>
+        <p>프로모션 구좌를 쿠폰이 실제로 작동하는 저관여·가격탄력 카테고리에 집중합니다. 쿠폰 사용률과 마케팅 비용 효율이 구조적으로 올라갑니다 — 지금은 가구에 쿠폰을 투입해 효율이 깨지는 상태입니다.</p>
+        <p class="shift">매번 협의하던 "이 구좌엔 뭘 넣나" → <b>관여도 매트릭스가 배치 룰이 된다</b></p>
+      </div>
+    </div>
+    <div class="team">
+      <div class="who">영업팀<span class="role">Confidence 존이라는 새 지면</span></div>
+      <div>
+        <p>지금 영업의 고통은 고관여 상품인데 프로모션 구좌밖에 팔 지면이 없어서, 쿠폰 수량 <strong>가정</strong>으로 목표를 세우고 그것을 파트너에게 <strong>약속</strong>하는 것입니다. Confidence 존이 생기면 고단가 상품의 목표를 지면 트래픽×전환 기준으로 세울 수 있습니다.</p>
+        <p class="shift">파트너 세일즈 스토리: "특가로 밀어드릴게요" → <b>"구매 결정 단계 유저에게 노출해드릴게요"</b></p>
+      </div>
+    </div>
+    <div class="team">
+      <div class="who">유저<span class="role">두 가지 방문 목적 모두 응답</span></div>
+      <div>
+        <p>딜 헌팅 유저는 Urgency 존이 맞이합니다. 특정 구매를 고민 중인 유저는 — 지금은 쇼핑홈이 줄 게 없어 검색으로 직행하거나 이탈하는 — Confidence 존이 맞이합니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <p class="eyebrow">THE BRIDGE</p>
+    <h2>두 존을 잇는 다리: 쿠폰의 역할 재정의</h2>
+    <p>타임머신 특가 건의 본질은 "고민 중인 유저가 혜택의 존재를 모른다"였습니다. PDP 배너 예외는 이것을 손으로 때운 것이고, 쇼핑홈에서는 구조로 풉니다.</p>
+    <div class="bridge">
+      <h3>고민 이어하기 모듈</h3>
+      <p>최근 본·스크랩한 고관여 상품을 쇼핑홈에 다시 보여주면서, <strong>그 상품에 지금 걸려 있는 혜택 상태를 함께 노출</strong>합니다.</p>
+      <p class="example">"스크랩하신 소파, 오늘 밤까지 선착순 쿠폰이 있어요"</p>
+    </div>
+    <p>이때 고관여 상품에서 쿠폰의 역할이 바뀝니다. 관심 없는 유저를 낚는 <span class="no">트리거</span>가 아니라, 고민이 무르익은 유저의 등을 밀어주는 <em>클로저</em>. "알면 100% 쓴다"는 데이터가 말해주는 것이 정확히 이것입니다 — 쿠폰이 무력한 게 아니라, <strong>투입 타이밍이 여정의 앞단이 아니라 뒷단이어야 한다</strong>는 것. SM 예산의 효율도 여기서 가장 크게 나올 것으로 예상합니다.</p>
+  </section>
+
+  <section>
+    <p class="eyebrow">VALIDATION</p>
+    <h2>시작 전에 검증할 것</h2>
+    <div class="table-wrap">
+      <table>
+        <tr><th>가설</th><th>확인 방법</th></tr>
+        <tr>
+          <td>방문 목적이 둘로 나뉜다</td>
+          <td>쇼핑홈 방문 세그먼트 분해 — 딜 헌팅 vs 특정 상품 고민 중 비율</td>
+        </tr>
+        <tr>
+          <td>카테고리별 관여도가 측정 가능하다</td>
+          <td>첫 조회→구매 리드타임 · 재방문 횟수 · 스크랩→구매 전환을 카테고리별 산출</td>
+        </tr>
+        <tr>
+          <td>혜택 인지가 실제 병목이다</td>
+          <td>쿠폰 인지 퍼널(노출 도달→발급→적용 구매) 유입 경로별 분해 — 진행 중인 PDP 노출 예외의 전후 비교가 첫 데이터</td>
+        </tr>
+      </table>
+    </div>
+    <p style="font-size:14px; color:var(--muted);">경계 케이스는 열린 질문으로 남깁니다:</p>
+    <ul class="qs">
+      <li>고관여지만 가격 민감한 상품(대형가전)은 어느 존에 두는가 — 두 존에 걸치는 상품의 처리 원칙</li>
+      <li>저관여지만 고단가인 상품(조명 등)의 배치 기준</li>
+      <li>기존 구좌(스페셜딜·기획전)와 새 존 구조의 이행 순서 — 병행 기간을 어떻게 설계하는가</li>
+    </ul>
+  </section>
+
+  <section>
+    <p class="eyebrow">NEXT</p>
+    <h2>다음 스텝</h2>
+    <ol class="steps">
+      <li><div><b>타임머신 특가 회고와 이 제안을 같은 자리에서 다룬다</b>방금 겪은 갈등이 이 개편의 필요성을 증명하는 사례다. 회고가 "정산"에서 "다음 그림"으로 넘어가는 자리가 되도록. <span class="owner">3팀 리더 · 회고 일정에 맞춰</span></div></li>
+      <li><div><b>검증 데이터 3종 산출</b>방문 세그먼트, 카테고리 관여도 지표, 쿠폰 인지 퍼널. <span class="owner">프로덕트 + 데이터 · 2주</span></div></li>
+      <li><div><b>관여도 매트릭스 초안 합의</b>카테고리×존 배치 룰의 v0. 경계 케이스 3건을 여기서 결정. <span class="owner">3팀 워킹그룹</span></div></li>
+      <li><div><b>"고민 이어하기" 모듈 선행 실험</b>존 개편 전에 독립적으로 검증 가능한 가장 작은 조각 — 지금 진행 중인 PDP 노출 예외의 구조화 버전. <span class="owner">프로덕트 · 매트릭스 합의 후</span></div></li>
+    </ol>
+  </section>
+
+  <footer>
+    이 문서는 논의를 시작하기 위한 초안입니다. 수치는 집요세 타임머신 특가 논의 스레드(8/21)에서 공유된 데이터를 인용했으며, 검증 데이터 산출 후 업데이트합니다.<br>
+    Yohan · Product Design · 2026.08.24
+  </footer>
+</div>
