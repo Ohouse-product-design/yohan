@@ -1,0 +1,421 @@
+<title>구좌에서 여정으로</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap">
+<style>
+  :root {
+    --bg: #F7F9FA;
+    --surface: #FFFFFF;
+    --ink: #17232B;
+    --muted: #55676F;
+    --line: #DCE4E8;
+    --accent: #0E87BD;
+    --accent-ink: #0A6E9B;
+    --accent-soft: #E3F4FC;
+    --warm: #C2622E;
+    --warm-ink: #A54F20;
+    --warm-soft: #FBEEE4;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F171C;
+      --surface: #16222A;
+      --ink: #E5EDF1;
+      --muted: #93A6B0;
+      --line: #24323A;
+      --accent: #53C6F0;
+      --accent-ink: #7DD4F5;
+      --accent-soft: #12303E;
+      --warm: #E39066;
+      --warm-ink: #ECA783;
+      --warm-soft: #2E2019;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F171C;
+    --surface: #16222A;
+    --ink: #E5EDF1;
+    --muted: #93A6B0;
+    --line: #24323A;
+    --accent: #53C6F0;
+    --accent-ink: #7DD4F5;
+    --accent-soft: #12303E;
+    --warm: #E39066;
+    --warm-ink: #ECA783;
+    --warm-soft: #2E2019;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    font-size: 16px;
+    line-height: 1.78;
+    margin: 0;
+    padding: 0 24px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page { max-width: 780px; margin: 0 auto; padding: 64px 0 96px; }
+
+  /* ---------- header ---------- */
+  .doc-meta {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    font-size: 13px; color: var(--muted); margin-bottom: 28px;
+  }
+  .doc-meta .tag {
+    color: var(--accent-ink); border: 1px solid var(--accent);
+    border-radius: 999px; padding: 1px 12px; font-weight: 500;
+  }
+  .doc-meta .sep { color: var(--line); }
+  h1 {
+    font-family: "Gowun Batang", "Nanum Myeongjo", serif;
+    font-size: clamp(34px, 6vw, 46px); font-weight: 700; line-height: 1.3;
+    letter-spacing: -0.01em; margin: 0 0 16px; text-wrap: balance;
+  }
+  .lede { font-size: 18px; color: var(--muted); margin: 0 0 8px; text-wrap: balance; }
+
+  /* ---------- TLDR ---------- */
+  .tldr {
+    background: var(--surface); border: 1px solid var(--line);
+    border-left: 3px solid var(--accent); border-radius: 0 12px 12px 0;
+    padding: 22px 26px; margin: 32px 0 0; font-size: 15px;
+  }
+  .tldr .row { display: grid; grid-template-columns: 92px 1fr; gap: 14px; padding: 7px 0; }
+  @media (max-width: 560px) { .tldr .row { grid-template-columns: 1fr; gap: 2px; } }
+  .tldr .k { font-size: 12.5px; font-weight: 700; letter-spacing: 0.1em; color: var(--accent-ink); padding-top: 3px; }
+  .tldr .v { line-height: 1.7; }
+
+  /* ---------- sections ---------- */
+  section { margin-top: 60px; }
+  h2 {
+    font-family: "Gowun Batang", "Nanum Myeongjo", serif;
+    font-size: 25px; font-weight: 700; line-height: 1.4;
+    margin: 0 0 18px; text-wrap: balance;
+  }
+  h2 .secnum {
+    font-size: 15px; color: var(--muted); font-weight: 400;
+    display: block; margin-bottom: 2px; font-variant-numeric: tabular-nums;
+  }
+  p { margin: 0 0 16px; }
+  strong { font-weight: 700; }
+  em { font-style: normal; font-weight: 700; color: var(--accent-ink); }
+
+  /* ---------- stat tiles ---------- */
+  .tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 22px 0; }
+  @media (max-width: 620px) { .tiles { grid-template-columns: 1fr; } }
+  .tile {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+    padding: 18px 22px 16px;
+  }
+  .tile .t-label { font-size: 12.5px; font-weight: 700; color: var(--muted); letter-spacing: 0.04em; }
+  .tile .t-num {
+    font-family: "Gowun Batang", serif; font-size: 34px; font-weight: 700;
+    line-height: 1.25; font-variant-numeric: tabular-nums; margin: 4px 0 2px;
+  }
+  .tile .t-num small { font-size: 18px; font-weight: 700; }
+  .tile .t-read { font-size: 13.5px; color: var(--muted); line-height: 1.6; }
+  .tile .t-read b { color: var(--ink); }
+  .tile .t-src { font-size: 11.5px; color: var(--muted); margin-top: 8px; opacity: 0.85; }
+
+  /* ---------- problem blocks ---------- */
+  .prob {
+    display: grid; grid-template-columns: 56px 1fr; gap: 18px;
+    padding: 20px 0; border-top: 1px solid var(--line);
+  }
+  .prob:last-of-type { border-bottom: 1px solid var(--line); }
+  @media (max-width: 560px) { .prob { grid-template-columns: 1fr; gap: 6px; } }
+  .prob .pid {
+    font-family: "Gowun Batang", serif; font-size: 20px; font-weight: 700;
+    color: var(--accent-ink); line-height: 1.4;
+  }
+  .prob.org .pid { color: var(--warm-ink); }
+  .prob h3 { font-size: 16.5px; margin: 0 0 8px; line-height: 1.5; }
+  .prob p { font-size: 15px; margin-bottom: 8px; }
+  .prob p:last-child { margin-bottom: 0; }
+  .prob .ev { font-size: 13.5px; color: var(--muted); }
+
+  /* ---------- zones (compact) ---------- */
+  .zones { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 22px 0; }
+  @media (max-width: 620px) { .zones { grid-template-columns: 1fr; } }
+  .zone {
+    border-radius: 12px; padding: 20px 22px;
+    border: 1px solid var(--line); background: var(--surface);
+  }
+  .zone.discover { border-top: 4px solid var(--warm); }
+  .zone.deliberate { border-top: 4px solid var(--accent); }
+  .zone .zone-label { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; margin-bottom: 4px; }
+  .zone.discover .zone-label { color: var(--warm-ink); }
+  .zone.deliberate .zone-label { color: var(--accent-ink); }
+  .zone h3 { font-family: "Gowun Batang", serif; font-size: 19px; margin: 0 0 10px; line-height: 1.4; }
+  .zone ul { margin: 0; padding-left: 18px; font-size: 14px; }
+  .zone li { margin-bottom: 6px; }
+  .zone .lever { font-size: 12.5px; font-weight: 700; margin-top: 12px; }
+  .zone.discover .lever { color: var(--warm-ink); }
+  .zone.deliberate .lever { color: var(--accent-ink); }
+
+  /* ---------- table ---------- */
+  .table-wrap { overflow-x: auto; margin: 20px 0; }
+  table {
+    border-collapse: collapse; width: 100%; min-width: 580px; font-size: 14px;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 10px; overflow: hidden;
+  }
+  th, td {
+    text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line);
+    vertical-align: top; line-height: 1.6;
+  }
+  th { font-size: 12px; font-weight: 700; color: var(--muted); background: var(--bg); }
+  tr:last-child td { border-bottom: none; }
+  td.num { font-variant-numeric: tabular-nums; white-space: nowrap; font-weight: 700; }
+  td:first-child { font-weight: 700; }
+  .formula {
+    font-size: 13px; color: var(--muted);
+    font-family: "IBM Plex Sans KR", sans-serif; display: block; margin-top: 2px; font-weight: 400;
+  }
+  .assume {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+    padding: 14px 20px; font-size: 13.5px; color: var(--muted); margin: 16px 0; line-height: 1.7;
+  }
+  .assume b { color: var(--ink); }
+
+  /* ---------- metric hierarchy ---------- */
+  .mrow { display: grid; grid-template-columns: 130px 1fr; gap: 18px; padding: 16px 0; border-top: 1px solid var(--line); font-size: 14.5px; }
+  .mrow:last-of-type { border-bottom: 1px solid var(--line); }
+  @media (max-width: 560px) { .mrow { grid-template-columns: 1fr; gap: 4px; } }
+  .mrow .mk { font-weight: 700; font-size: 13px; letter-spacing: 0.06em; }
+  .mrow .mk.north { color: var(--accent-ink); }
+  .mrow .mk.input { color: var(--ink); }
+  .mrow .mk.guard { color: var(--warm-ink); }
+  .mrow .mv { line-height: 1.7; }
+  .mrow .mv .note { font-size: 13px; color: var(--muted); }
+
+  ol.steps { counter-reset: step; list-style: none; padding: 0; margin: 20px 0 0; }
+  ol.steps li {
+    counter-increment: step; display: grid; grid-template-columns: 44px 1fr;
+    gap: 16px; padding: 15px 0; border-top: 1px solid var(--line); font-size: 15px;
+  }
+  ol.steps li::before {
+    content: counter(step);
+    font-family: "Gowun Batang", serif; font-size: 21px; font-weight: 700;
+    color: var(--accent-ink); font-variant-numeric: tabular-nums; line-height: 1.3;
+  }
+  ol.steps li b { display: block; }
+  ol.steps .owner { font-size: 12.5px; color: var(--muted); font-weight: 500; }
+
+  footer {
+    margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--line);
+    font-size: 13px; color: var(--muted); line-height: 1.7;
+  }
+</style>
+
+<div class="page">
+  <header>
+    <div class="doc-meta">
+      <span class="tag">쇼핑홈 개편 제안 · 1-Pager v0.4</span>
+      <span class="sep">|</span>
+      <span>2026.08.24</span>
+      <span class="sep">|</span>
+      <span>Yohan · Product Design</span>
+    </div>
+    <h1>구좌에서 여정으로</h1>
+    <p class="lede">쇼핑홈을 프로모션 구좌의 나열에서 <strong>발견·탐색 두 모드</strong>로 재구성한다.</p>
+
+    <div class="tldr">
+      <div class="row"><div class="k">문제</div><div class="v">쇼핑홈은 진입만 하면 GMV 1.96배로 작동하는데, 자발 진입이 약하고(진입률 ~13%) 진입자의 71%(75만)를 구매로 전환하지 못한다. 화면이 유저 여정이 아니라 내부 구좌 단위로 짜여 있어, 유저에겐 차별 가치가 없고 조직엔 구좌 제로섬 협상이 반복된다.</div></div>
+      <div class="row"><div class="k">솔루션</div><div class="v">발견 모드(기획전 한눈에·트렌드·브랜드·딜)와 탐색 모드(카테고리 허브·랭킹/소셜프루프·오피셜 깊이·고민 이어하기)로 화면 단위를 교체하고, 프로모션 도구는 관여도 매트릭스로 배치를 룰화한다.</div></div>
+      <div class="row"><div class="k">임팩트</div><div class="v">방향 추정 기준 분석 윈도우당 <strong>+16억~52억 GMV</strong> (진입 확대 + 미수확 전환, §5) + SM 쿠폰 비용 효율 개선 + 영업 목표 수립 구조 정상화. 홀드아웃으로 실측 확정.</div></div>
+      <div class="row"><div class="k">Ask</div><div class="v">3팀 킥오프 합의 + 검증 데이터 3종 산출 승인 + "고민 이어하기" 선행 실험 착수.</div></div>
+    </div>
+  </header>
+
+  <section>
+    <h2><span class="secnum">1</span>지표적 배경</h2>
+    <div class="tiles">
+      <div class="tile">
+        <div class="t-label">쇼핑탭 진입률</div>
+        <div class="t-num">~13<small>%</small></div>
+        <div class="t-read">4월 메인홈 개편 후 진입 UV 추가 하락. <b>자발 진입 동기가 약하다</b> — 문 앞의 문제.</div>
+        <div class="t-src">엘라 분석 · 26.05</div>
+      </div>
+      <div class="tile">
+        <div class="t-label">진입 buyer GMV lift</div>
+        <div class="t-num">1.96<small>배</small></div>
+        <div class="t-read">진입 buyer 1인당 23.1만원 vs 미진입 11.8만원 (PDP 3.0배 · 스크랩 3.5배). 자기선택 보정 후에도 1.34~1.81배. <b>들어오기만 하면 작동한다.</b></div>
+        <div class="t-src">엘라 분석 · 26.05 · buyer 27만 vs 18만</div>
+      </div>
+      <div class="tile">
+        <div class="t-label">미수확 풀</div>
+        <div class="t-num">75<small>만 (71%)</small></div>
+        <div class="t-read">진입자 10명 중 7명이 구경만 하고 사지 않는다. <b>문 안의 문제</b> — 결정을 진전시킬 장치가 없다.</div>
+        <div class="t-src">VoC F1 · 26.05</div>
+      </div>
+      <div class="tile">
+        <div class="t-label">고관여 상품 혜택 인지 격차</div>
+        <div class="t-num">&lt;10건 <small>vs ~100%</small></div>
+        <div class="t-read">가구 선착순 쿠폰 적용 구매는 상품당 10건 미만, 그러나 인지 시 적용률은 ~100%. <b>혜택이 무력한 게 아니라 안 보인다.</b></div>
+        <div class="t-src">타임머신 특가 · 26.08 · 재검증 필요</div>
+      </div>
+    </div>
+    <p>네 지표가 하나의 진단을 만든다: 쇼핑홈의 병목은 콘텐츠 부족이 아니라 <strong>구조</strong>다 — 들어올 이유(발견)와 결정을 진전시킬 장치(탐색)가 화면 단위로 존재하지 않는다.</p>
+  </section>
+
+  <section>
+    <h2><span class="secnum">2</span>유저 문제</h2>
+    <div class="prob">
+      <div class="pid">P1</div>
+      <div>
+        <h3>구경하러 온 유저에게 — 들어올 이유가 없다</h3>
+        <p>메인홈·검색과 차별되는 가치를 인지하지 못한다. 상단 딜·배너·카테고리 버튼은 시선이 즉시 지나치고, 트렌드·브랜드 발견은 외부(네이버·유튜브)에서 해결한 뒤 여기서는 구매만 한다.</p>
+        <p class="ev">근거: 5/21 UT "메인홈과 차별성 없을 것"(참여자 직접 발화) · 상단 구좌 즉시 지나침 · LCPY 페르소나 "발견은 외부, 구매만 여기서" (26.05)</p>
+      </div>
+    </div>
+    <div class="prob">
+      <div class="pid">P2</div>
+      <div>
+        <h3>고민 중인 유저에게 — 결정을 도와주지 않는다</h3>
+        <p>가구처럼 결정에 시간이 필요한 고관여 상품을 고민 중인 유저가 쇼핑홈에 와도, 비교·공간 맥락·배송/설치 같은 결정 재료가 없고 자기 상품에 걸린 혜택조차 보이지 않는다. 미수확 풀 75만이 이 상태로 이탈한다.</p>
+        <p class="ev">근거: 미수확 풀 75만 "데려오기 포기" 멘탈모델 (VoC F1) · 가구 쿠폰 인지 격차 (26.08)</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="secnum">3</span>조직 문제 — SM · 영업</h2>
+    <div class="prob org">
+      <div class="pid">O1</div>
+      <div>
+        <h3>구좌가 화면의 단위라서, 팀 간 협상이 제로섬이다</h3>
+        <p>스페셜딜·타임특가·기획전 — 내부 예산 단위가 화면에 그대로 투영돼 있다. 한 팀의 노출은 다른 팀의 노출 순서 하락이고, 그래서 구좌 위치·순서를 놓고 협상이 반복된다 (8월 타임특가 노출 순서 논쟁이 그 증상).</p>
+      </div>
+    </div>
+    <div class="prob org">
+      <div class="pid">O2</div>
+      <div>
+        <h3>SM — 쿠폰이 안 먹히는 카테고리에 예산이 들어간다</h3>
+        <p>urgency 도구(선착순 쿠폰)를 고관여 카테고리에 투입하면 사용률이 저조하고, 사용률이 저조하면 비용 효율 해명이 SM의 몫이 된다. 배치 룰이 없어서 매 프로모션마다 같은 미스매치와 같은 논쟁이 반복된다.</p>
+      </div>
+    </div>
+    <div class="prob org">
+      <div class="pid">O3</div>
+      <div>
+        <h3>영업 — 가정으로 목표를 세우고, 약속으로 파트너에게 전한다</h3>
+        <p>고관여 상품을 팔 지면이 프로모션 구좌뿐이라, "쿠폰 N개 사용" 같은 <strong>가정</strong>을 근거로 목표를 세우고 그 거래액을 파트너에게 <strong>약속</strong>하며 역마진 수준의 가격 협의까지 한다. 가정이 빗나가면(8월: 사용률 저조) 그 비용은 파트너 신뢰와 영업이 진다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="secnum">4</span>솔루션 — 두 모드 구조</h2>
+    <p>5/13 합의 정의 "의사결정을 돕는, 발견 중심 공간"의 두 절을 각각 화면 단위로 승격시킨다.</p>
+    <div class="zones">
+      <div class="zone discover">
+        <div class="zone-label">MODE 1 · 발견</div>
+        <h3>들어올 이유를 만든다 → P1 · O2</h3>
+        <ul>
+          <li><strong>기획전 한눈에</strong> — 진행 중인 모든 기획전·프로모션의 조감도. 메인홈 ATF 배너는 몇 개를 순차 노출할 뿐, <em>전체를 펼쳐 보여주는 건 쇼핑홈만 가능</em> — 메인홈 대비 차별 가치의 앵커 (P1의 직접 답)</li>
+          <li><strong>상시 기획전·이벤트</strong> — 영업이 소싱한 브랜드·상품을 빅프로모션 캘린더와 무관하게 상시 노출. 위 조감도의 상시 공급원이자 영업의 상시 지면 (O3)</li>
+          <li><strong>트렌드·브랜드 피드</strong> — 스타일·브랜드 단위 큐레이션. 가격 신호 없이 성립하는 발견</li>
+          <li><strong>딜 (타임특가·스페셜딜)</strong> — 저관여·가격탄력 카테고리 한정의 클로징 도구</li>
+        </ul>
+        <div class="lever">전환 레버: URGENCY — 단, 발견 모드 안의 도구이지 발견 그 자체가 아님 (딜 진열대 회귀 = 실패 조건)</div>
+      </div>
+      <div class="zone deliberate">
+        <div class="zone-label">MODE 2 · 탐색</div>
+        <h3>결정을 진전시킨다 → P2 · O3</h3>
+        <ul>
+          <li><strong>카테고리 허브</strong> — 고민 유저의 사고 단위인 카테고리로 비교·공간 맥락·배송/설치를 모은 뼈대</li>
+          <li><strong>랭킹·크리에이터 픽·소셜프루프</strong> — 카테고리별 판매 랭킹, 전문가/크리에이터 큐레이션, 구매수·리뷰 하이라이트. "남들의 선택"이라는 증거로 고관여 결정의 불안을 줄이는 confidence 도구</li>
+          <li><strong>오피셜 브랜드 깊이</strong> — 발견한 브랜드의 헤리티지·신상·프로모션</li>
+          <li><strong>고민 이어하기</strong> — 최근 본·스크랩 상품 + <em>현재 혜택 상태</em> 노출. 쿠폰을 트리거에서 클로저로 전환</li>
+        </ul>
+        <div class="lever">전환 레버: CONFIDENCE</div>
+      </div>
+    </div>
+    <p><strong>클로저 레이어 (쇼핑홈 밖 확장):</strong> "고민 이어하기"의 짝으로 <strong>PDP 혜택 클로저 구좌</strong>를 둔다 — 결정 시점의 유저에게 마감 프레이밍으로 혜택을 노출 ("12시간 뒤 사라지는 쿠폰이 있어요", "오늘까지 구매하면 3,400원 할인"). urgency는 여정 앞단의 트리거로는 실패했지만(§1), 결정 시점의 클로저로는 적용률 ~100%다. 8월 타임특가 PDP 노출 예외가 이 구좌의 수동 프로토타입.</p>
+    <p><strong>배치 룰:</strong> 카테고리 관여도 매트릭스(리드타임·재방문·스크랩→구매 전환으로 산출)가 어떤 상품·혜택이 어느 모드에 놓이는지를 결정한다. 구좌 협상(O1)을 룰로 대체하는 장치.</p>
+  </section>
+
+  <section>
+    <h2><span class="secnum">5</span>임팩트 예측</h2>
+    <p>세 레버로 나눠 추정한다. 절대액은 26.05 엘라 분석의 buyer 모수·기간을 그대로 쓴 <strong>방향 추정</strong>이며, 기간 정의 확인 후 캘리브레이션한다.</p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>레버</th><th>메커니즘</th><th>보수</th><th>기준</th></tr>
+        <tr>
+          <td>A. 진입 확대<span class="formula">미진입 buyer 18만 × 진입전환 x% × 인당 증분 4.0~9.6만원*</span></td>
+          <td>발견 모드가 자발 진입 동기 제공 (P1)</td>
+          <td class="num">x=10% → +7~17억</td>
+          <td class="num">x=20% → +14~34억</td>
+        </tr>
+        <tr>
+          <td>B. 미수확 전환<span class="formula">미수확 풀 75만 × 구매전환 y%p × 인당 11.8만원**</span></td>
+          <td>탐색 모드가 결정 진전 장치 제공 (P2)</td>
+          <td class="num">y=1%p → +9억</td>
+          <td class="num">y=2%p → +18억</td>
+        </tr>
+        <tr>
+          <td>C. 혜택 클로저<span class="formula">고관여 혜택 인지율 × 적용률 ~100%</span></td>
+          <td>고민 이어하기 + PDP 클로저 구좌가 인지 병목 해소 + SM 쿠폰 사용률 개선</td>
+          <td class="num" colspan="2">사이징 보류 — 진행 중인 PDP 노출 예외의 전후 비교가 첫 실측치</td>
+        </tr>
+        <tr>
+          <td>합계 (A+B)</td>
+          <td>분석 윈도우 기준</td>
+          <td class="num">+16~26억</td>
+          <td class="num">+32~52억</td>
+        </tr>
+      </table>
+    </div>
+    <div class="assume">
+      <b>가정 명시</b> — * 인당 증분 = 미진입 buyer GMV 11.8만원 × (보정 uplift 1.34~1.81 − 1). 원시 격차(1.96배)가 아닌 보정치를 사용. ** 미수확 전환자는 보수적으로 미진입 buyer 수준의 GMV 가정. A·B는 모수가 분리되어(미진입 buyer의 진입 vs 진입자의 구매) 중복 계상 없음. uplift는 관측 보정치이지 인과 추정이 아니므로, 최종 임팩트는 §6의 홀드아웃으로 확정한다.
+    </div>
+    <p><strong>정성 임팩트</strong> — O2: 쿠폰이 작동 카테고리에만 투입되어 사용률·비용 효율 개선(8월 가구 사례의 역방향). O3: 고관여 상품 목표를 쿠폰 가정이 아닌 지면 트래픽×전환으로 수립하고, 상시 기획전 지면으로 빅프로모션 캘린더 종속에서 벗어난다 — 파트너 약속의 근거가 통제 가능한 변수로 바뀐다. 파트너향 오피셜 공간은 영업이 팔 수 있는 새 상품(브랜드홈 수익화·RMN 방향과 정합).</p>
+  </section>
+
+  <section>
+    <h2><span class="secnum">6</span>측정 설계</h2>
+    <div class="mrow">
+      <div class="mk north">NORTH STAR</div>
+      <div class="mv">쇼핑홈 경유 GMV · PDP 조회수 · 구매 전환율 <span class="note">(5/13 합의 KPI 유지)</span></div>
+    </div>
+    <div class="mrow">
+      <div class="mk input">INPUT (레버별)</div>
+      <div class="mv">A: 자발 진입률(강제 노출 제외 재정의) · B: 미수확 풀 구매 전환율 · C: 혜택 노출 도달→발급→적용 퍼널 <span class="note">— 레버와 지표가 1:1이라 어느 레버가 움직였는지 분리 측정 가능</span></div>
+    </div>
+    <div class="mrow">
+      <div class="mk guard">GUARDRAIL</div>
+      <div class="mv">발견 모드 내 딜 노출 비중(딜 진열대 회귀 감시) · 쿠폰 사용률·마케팅 비용 효율 · 메인홈 잠식(cannibalization) · 파트너 목표 달성률 <b>분포</b> <span class="note">— 합산이 아닌 분포로 보는 것이 8월 논쟁의 교훈</span> · PDP 클로저 구좌는 <b>실제 마감 시각만 표기</b>(가짜 urgency 금지 — 신뢰 가드레일)</div>
+    </div>
+    <div class="mrow">
+      <div class="mk input">실험 설계</div>
+      <div class="mv">모듈 단위 홀드아웃 — "고민 이어하기"부터 (트래픽 스플릿, 최소 2주). 전면 개편 전 각 모듈의 증분을 독립 검증. 진행 중인 타임특가 PDP 노출 예외는 레버 C의 자연 실험으로 전후 비교. <span class="note">전후 비교는 시즌성(프로모션 기간) 보정 필수.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="secnum">7</span>리스크 · 열린 질문</h2>
+    <div class="table-wrap">
+      <table>
+        <tr><th>리스크</th><th>대응</th></tr>
+        <tr><td>자발 진입 동기 미검증<span class="formula">5월 UT는 강제 노출 — 두 모드 가설의 최대 구멍</span></td><td>5/27~30 본 IDI 결과 회수, 미진행 시 최우선 리서치</td></tr>
+        <tr><td>경계 카테고리<span class="formula">고관여·가격민감(대형가전) 등 두 모드에 걸치는 상품</span></td><td>관여도 매트릭스 v0에서 원칙 결정 (3팀 워킹그룹)</td></tr>
+        <tr><td>수치 신뢰도<span class="formula">엘라 분석 기간 정의 미확인 · 8월 쿠폰 수치는 원본 스레드 삭제</span></td><td>킥오프 전 데이터 재검증 — 임팩트 절대액 캘리브레이션</td></tr>
+        <tr><td>이행기 매출 공백<span class="formula">기존 구좌 축소가 개편 완료보다 먼저 일어나는 경우</span></td><td>모듈 단위 병행 도입 — 기존 구좌는 매트릭스 적용으로만 조정</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="secnum">8</span>다음 스텝</h2>
+    <ol class="steps">
+      <li><div><b>3팀 킥오프 — 타임특가 회고와 같은 자리에서</b>이 문서 합의 + 경계 케이스 논의 착수. <span class="owner">3팀 리더 · 회고 일정</span></div></li>
+      <li><div><b>검증 데이터 3종 + 수치 캘리브레이션</b>자발 진입률 재정의, 관여도 지표, 혜택 인지 퍼널 + 엘라 분석 기간 확인. <span class="owner">프로덕트+데이터 · 2주</span></div></li>
+      <li><div><b>"고민 이어하기" 홀드아웃 실험</b>가장 작은 독립 검증 조각 — 레버 C 실측. <span class="owner">프로덕트 · 데이터 산출 후</span></div></li>
+      <li><div><b>관여도 매트릭스 v0 합의 → 모듈 로드맵</b>실험 결과로 A·B 레버 투자 순서 결정. <span class="owner">3팀 워킹그룹</span></div></li>
+    </ol>
+  </section>
+
+  <footer>
+    출처 — 「[26.05] 쇼핑홈 정체성 재정의 제안」(익표, 6/26 정정 반영: 출처 미확인 수치 미인용) · 「08. 쇼핑홈 진입 분석」(엘라, 26.05.06) · 집요세 타임머신 특가 스레드(26.08.21, 원본 삭제 — 인용 수치 재검증 필요). 임팩트 수치는 전부 방향 추정이며 홀드아웃 실측으로 대체 예정.<br>
+    Yohan · Product Design · 2026.08.24 · v0.4
+  </footer>
+</div>
