@@ -1,6 +1,6 @@
 ---
 name: book-support
-description: 오늘의집(버킷플레이스) 사내 도서 지원 신청을 끝까지 대신 실행한다 — 노션 「📚 도서 지원」 가이드 확인 → 버킷 도서 리스트 중복 확인 → 알라딘 공용 계정 로그인 → 장바구니 담기·검증 → 슬랙 #support_office-it-구매 에 신청 글 작성 → 스레드에 책제목·장바구니 담기 완료 여부·링크 기록. 사용자가 "도서 지원", "도서 신청", "책 신청해줘", "책 사줘", "도서 구매 신청", "알라딘 장바구니 담아줘", "이 책 회사에서 사고 싶어" 같은 말을 하거나 책 제목/알라딘 링크를 주며 회사 지원을 원할 때 반드시 이 스킬을 쓴다.
+description: 오늘의집(버킷플레이스) 사내 도서 지원 신청을 끝까지 대신 실행한다 — 노션 「📚 도서 지원」 가이드 확인 → 버킷 도서 리스트 중복 확인 → 알라딘 공용 계정 로그인 → 장바구니 담기·검증(Claude in Chrome) → 슬랙 #support_office-it-구매 에 신청 글 작성 → 스레드에 책제목·장바구니 담기 완료 여부·링크 기록. 사용자가 "도서 지원", "도서 신청", "책 신청해줘", "책 사줘", "도서 구매 신청", "알라딘 장바구니 담아줘", "이 책 회사에서 사고 싶어" 같은 말을 하거나 책 제목/알라딘 링크를 주며 회사 지원을 원할 때 반드시 이 스킬을 쓴다.
 ---
 
 # 도서 지원 신청 (Book Support)
@@ -41,26 +41,49 @@ description: 오늘의집(버킷플레이스) 사내 도서 지원 신청을 끝
   책장이면 직접 가져와 시트 위치를 본인으로 수정, 개인 보유면 DM 으로 문의하라고 안내한다. 신청하지 않는다.
 - 확인 불가 → 시트 링크를 주고 "사내 보유 여부를 직접 한 번 확인해 주세요" 라고 말한 뒤, 사용자가 진행하라고 하면 계속한다.
 
-### 3. 알라딘 로그인 → 장바구니 담기 → 검증
+### 3. 알라딘 로그인 → 장바구니 담기 → 검증 (Claude in Chrome)
+알라딘 단계는 **Claude in Chrome MCP(`mcp__claude-in-chrome__*`)로 사용자의 실제 크롬에서** 한다.
+클라우드 헤드리스 브라우저는 알라딘이 로그인을 거부하므로(에러코드 42FB6013…) 쓰지 않는다.
+시작 전에 `chrome-browser` 스킬을 로드하고, 도구는 한 번의 ToolSearch 로 불러온다:
+`select:mcp__claude-in-chrome__tabs_context_mcp,mcp__claude-in-chrome__tabs_create_mcp,mcp__claude-in-chrome__tabs_close_mcp,mcp__claude-in-chrome__navigate,mcp__claude-in-chrome__read_page,mcp__claude-in-chrome__find,mcp__claude-in-chrome__form_input,mcp__claude-in-chrome__computer,mcp__claude-in-chrome__javascript_tool`
+확장이 연결되어 있지 않으면 재시도하지 말고 "크롬을 켜고 Claude in Chrome 확장을 연결해 주세요" 라고 말한 뒤 멈춘다.
+
 공용 계정의 장바구니는 **회사 전체가 같이 쓴다.** 남이 담은 책을 지우거나 수량을 바꾸지 않는다.
 이미 담긴 책은 다시 담지 않는다(수량 2가 됨).
 
-**A. 스크립트 경로 (기본)** — `scripts/aladin_cart.js` (Playwright)
-```bash
-ALADIN_ID='<노션 값>' ALADIN_PW='<노션 값>' node scripts/aladin_cart.js --dry-run "<URL 또는 도서명>" ["..."]
-```
-1. 먼저 `--dry-run` 으로 로그인·도서 확인·장바구니 중복을 본다 (`would_add` / `already_in_cart` / `not_found`).
-2. 제목이 맞으면 `--dry-run` 없이 다시 실행해 담는다. 스크립트가 담은 뒤 장바구니를 다시 읽어 `added` 를 확인한다.
-3. 결과 JSON 의 `status` 를 그대로 다음 단계에 쓴다. `added` 와 `already_in_cart` 는 둘 다 "장바구니 담기 완료" 이다.
-- 클라우드 헤드리스 환경에서는 알라딘이 `로그인 과정에 문제가 발생하였습니다 (에러코드 42FB6013…)` 로 거부할 수 있다.
-  비밀번호 오류(`입력하신 로그인 정보가 잘못되었습니다`)와 구분한다. 이 경우 우회하지 말고 B 경로로 간다.
-- 로컬 맥에서 `HEADED=1` 로 실행하면 실제 창으로 동작한다.
-- 네트워크 차단(`CONNECT tunnel failed 403`)이면 환경 허용 호스트에 `www.aladin.co.kr` 가 있는지 확인한다.
+1. **새 탭 준비** — `tabs_context_mcp` → `tabs_create_mcp` 로 새 탭을 열어 그 탭에서만 작업한다(사용자 탭은 건드리지 않음).
+2. **계정 확인** — `https://www.aladin.co.kr/shop/wbasket.aspx` 로 이동해 `read_page` 로 상단을 본다.
+   - 이미 로그인되어 있다면 **회사 공용 계정인지 확인**한다(`/account/wmaininfo.aspx` 마이페이지의 아이디가 노션 계정과 같은지).
+     사용자의 **개인 알라딘 계정**이면 개인 장바구니에 담기면 안 되므로, 로그아웃해도 되는지 사용자에게 먼저 묻는다.
+   - 로그인 안 되어 있으면 3번으로.
+3. **로그인** — `https://www.aladin.co.kr/login/wlogin_popup.aspx` 로 이동 →
+   `form_input` 으로 `#Email`, `#Password` 에 노션 계정 입력 → 「로그인」 링크(`a[href="javascript:fn_submit();"]`)를 클릭.
+   Enter 로 제출하면 실패한다. `wlogin_popup_result.aspx` 로 넘어가면 성공.
+   - 비밀번호가 틀리면 알라딘이 `alert` 를 띄워 확장이 멈출 수 있다. 입력 전에 노션 값을 정확히 옮겼는지 확인하고,
+     멈추면 사용자에게 크롬에서 알림창을 닫아 달라고 한다.
+4. **도서 확정** — URL 이 있으면 그대로, 도서명만 있으면
+   `https://www.aladin.co.kr/search/wsearchresult.aspx?SearchTarget=Book&SearchWord=<도서명>` 의 첫 결과(`.ss_book_box[itemid]`)를 쓴다.
+   상품 페이지 `https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=<id>` 에서 제목·저자·판매가를 읽어 사용자에게 맞는지 확인한다.
+5. **중복 확인** — 장바구니 페이지에서 `javascript_tool` 로 담긴 상품 ItemId 를 모은다:
+   ```js
+   [...document.querySelectorAll('a[href*="ItemId="]')]
+     .filter(a => /^\[[^\]]+\]/.test(a.innerText.trim()))   // "[국내도서] 제목" 형태 = 장바구니 행
+     .map(a => a.href.match(/ItemId=(\d+)/)[1] + ' ' + a.innerText.trim())
+   ```
+   이미 있으면 담지 않고 상태를 `already_in_cart`(= 장바구니 담기 완료)로 둔다.
+6. **담기** — 상품 페이지에서 `javascript_tool` 로 상세 페이지 「장바구니 담기」 버튼과 같은 요청을 보낸다.
+   버튼 클릭은 확인창(confirm)이 뜰 수 있어 확장이 멈추므로 피한다.
+   ```js
+   const isbn = document.querySelector('.hd_ISBN').value;
+   const r = await fetch(`/shop/BasketAjax.aspx?method=BasketAdd&isbn=${encodeURIComponent(isbn)}&_=${Date.now()}`, { credentials: 'include' });
+   await r.text();
+   ```
+7. **검증** — 장바구니 페이지를 다시 열어 5번 스크립트로 해당 ItemId 가 있는지 확인한다.
+   **장바구니에서 확인된 경우에만** "장바구니 담기 완료" 로 기록한다. 없으면 `failed` 와 이유를 남긴다.
+8. **정리** — 만든 탭을 `tabs_close_mcp` 로 닫는다. 로그인 상태는 그대로 둔다.
 
-**B. 브라우저 경로 (A 가 막힐 때)** — Claude in Chrome 또는 내장 브라우저 스킬을 먼저 로드한 뒤
-1. `https://www.aladin.co.kr/login/wlogin_popup.aspx` → 아이디/비밀번호 입력 → 「로그인」 버튼 클릭(Enter 제출은 실패함).
-2. 상품 페이지에서 「장바구니 담기」 클릭 → 확인 레이어 닫기.
-3. `/shop/wbasket.aspx` 에서 해당 제목이 목록에 있는지 **눈으로 확인**한 뒤에만 "완료" 로 기록한다.
+참고: `scripts/aladin_cart.js`(Playwright)는 같은 흐름의 스크립트 버전이다. 로컬 맥에서 `HEADED=1` 로 실행할 때만 쓰고,
+클라우드에서는 쓰지 않는다.
 
 ### 4. 슬랙 신청 글 + 스레드
 채널 관례(실제 신청 예시: 2026-11-16 Yohan 「좋은 전략 나쁜 전략」 스레드)를 그대로 따른다.
@@ -99,5 +122,5 @@ ALADIN_ID='<노션 값>' ALADIN_PW='<노션 값>' node scripts/aladin_cart.js --
 - 결제/주문하지 않는다. 구매는 담당자가 한다. 이 스킬은 **장바구니까지**만.
 - 공용 장바구니의 다른 상품을 삭제·수정하지 않는다.
 - 계정 정보를 커밋·로그·슬랙·대화에 남기지 않는다.
-- 봇 탐지를 피하려는 우회(UA 위장 등)를 하지 않는다. 막히면 B 경로나 사용자에게 넘긴다.
+- 봇 탐지를 피하려는 우회(UA 위장 등)를 하지 않는다. 알라딘은 Claude in Chrome 으로만 다룬다.
 - 장바구니에서 확인하지 못한 책을 "담기 완료" 로 쓰지 않는다.
