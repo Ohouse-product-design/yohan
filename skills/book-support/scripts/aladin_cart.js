@@ -37,7 +37,7 @@ async function login(page) {
   const onDialog = (d) => { dialogs.push(d.message()); d.dismiss().catch(() => {}); };
   page.on('dialog', onDialog);
   // 주의: 헤드리스 브라우저 기본 설정으로는 알라딘이 '로그인 과정에 문제(에러코드 42FB6013…)'로 거부할 수 있다.
-  // 그 경우 SKILL.md 의 「브라우저 경로」(Claude in Chrome / 내장 브라우저)로 진행한다.
+  // 그래서 기본 경로는 SKILL.md 의 Claude in Chrome 이다. 이 스크립트는 로컬에서 HEADED=1 로만 쓴다.
   await page.goto(`${BASE}/login/wlogin_popup.aspx`, { waitUntil: 'networkidle' });
   await page.fill('#Email', process.env.ALADIN_ID);
   await page.fill('#Password', process.env.ALADIN_PW);
